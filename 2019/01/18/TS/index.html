@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="&amp;emsp;&amp;emsp;本文将介绍禁忌搜索算法的一些基本概念、算法流程以及算法的ython实现。（注：本文由有何不可原创，如若转载，请注明文章出处！）">
+<meta name="keywords" content="Python,Algorithm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="禁忌搜索算法">
+<meta property="og:url" content="http://yoursite.com/2019/01/18/TS/index.html">
+<meta property="og:site_name" content="有何不可">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;本文将介绍禁忌搜索算法的一些基本概念、算法流程以及算法的ython实现。（注：本文由有何不可原创，如若转载，请注明文章出处！）">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-07T11:03:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="禁忌搜索算法">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;本文将介绍禁忌搜索算法的一些基本概念、算法流程以及算法的ython实现。（注：本文由有何不可原创，如若转载，请注明文章出处！）">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/18/TS/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>禁忌搜索算法 | 有何不可</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">有何不可</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/18/TS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="有何不可">
+      <meta itemprop="description" content="一个记录学习的博客~ ^.^">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="有何不可">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">禁忌搜索算法
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-18 18:30:38" itemprop="dateCreated datePublished" datetime="2019-01-18T18:30:38+08:00">2019-01-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-07 19:03:30" itemprop="dateModified" datetime="2019-03-07T19:03:30+08:00">2019-03-07</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Intelligent-algorithm/" itemprop="url" rel="index"><span itemprop="name">Intelligent algorithm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&emsp;&emsp;本文将介绍禁忌搜索算法的一些基本概念、算法流程以及算法的ython实现。（注：本文由有何不可原创，如若转载，请注明文章出处！）<br><a id="more"></a></p>
+<h2 id="一-基本思想"><a href="#一-基本思想" class="headerlink" title="一. 基本思想"></a>一. 基本思想</h2><p>&emsp;&emsp;禁忌搜索算法的思想最早由美国工程院院士Glover教授于1986年提出，并在1989年和1990年对该方法做出了进一步的定义和发展。<br>&emsp;&emsp;为了克服局部邻域搜索算法容易陷入局部最优的不足，在禁忌搜搜算法中引入了“禁忌表”，该表用于记录已经搜索过的最优点。在下一次的搜索中，则不再或有选择的搜索该点。<br>&emsp;&emsp;禁忌搜索算法是对局部邻域搜索算法的一种扩展，是一种全局邻域搜索算法。在局部邻域搜索算法的基础上，禁忌搜索算法引入“禁忌表”来禁止重复 搜索，并通过藐视准则来释放一些被禁止的对象，从而保证了多样化的搜索，最终实现全局优化。<br>&emsp;&emsp;禁忌搜索算法，由于引入“禁忌表“，则具有了同人类一样的”记忆“的功能，用”记忆“来指导算法的搜索过程。对已经搜索过的地方，不再立即去搜索，转而去搜索其它地方，若在其它最终没有找到，则再去搜索过的地方进行搜索。 </p>
+<h2 id="二-算法中涉及的一些概念"><a href="#二-算法中涉及的一些概念" class="headerlink" title="二. 算法中涉及的一些概念"></a>二. 算法中涉及的一些概念</h2><blockquote>
+<ol>
+<li>初始解</li>
+<li>候选解</li>
+<li>领域结构</li>
+<li>禁忌表（禁忌准则）</li>
+<li>禁忌对象</li>
+<li>禁忌长度</li>
+<li>藐视准则</li>
+<li>搜索策略</li>
+<li>终止准则</li>
+</ol>
+</blockquote>
+<h2 id="三-算法流程"><a href="#三-算法流程" class="headerlink" title="三. 算法流程"></a>三. 算法流程</h2><blockquote>
+<ol>
+<li>初始化参数，并随机产生初始解和给定一种邻域结构；<br>&emsp;&emsp;默认初始解为当前解和最优解，并更新禁忌表。</li>
+<li>根据给定的邻域结构，由当前解随机产生指定数量的候选解；</li>
+<li>判断候选解是否在禁忌表中；<br>&emsp;1). 候选解全都在禁忌表中，选择候选解中最优的解作为当前解和最优解。然后，将当前解与最优解进行比较，以决定是否更新最优解。最后，跳转到步骤 4）。<br>&emsp;2). 候选解部分在禁忌表中，判断候选解中是否存在最优解；<br>&emsp;&emsp;a). 存在最优解，判断最优解是否在禁忌表中（禁忌表的操作不同同而已）；直接令最优的候选解作为当前解，并更新最优解。然后，跳转到步骤 4）。<br>&emsp;&emsp;b). 不存在最优解，选取不在禁忌表中的最优的候选解，将其与当前解进行比较，以决定是否更新当前解。若更新当前解，则将当前解与最优解进行比较，以决定是否更新最优解。然后，跳转到步骤4）。<br>&emsp;3). 候选解全不在禁忌表中<br> 将候选解与当前解进行比较，以决定是否更新当前解。若更新当前解，则将当前解与最优解进行比较，以决定是否更新最优解。然后，跳转到步骤4）。</li>
+<li>更新禁忌表;</li>
+<li>判断是否达到迭代次数，若没有达到，则跳转到步骤 2）。否则，直接输出结果。</li>
+</ol>
+</blockquote>
+<h2 id="四-算法Python实现"><a href="#四-算法Python实现" class="headerlink" title="四. 算法Python实现"></a>四. 算法Python实现</h2><blockquote>
+<p>&emsp;&emsp;本文以两个自变量为例，通过计算一个指定函数的最小值，实现TS算法。</p>
+</blockquote>
+<h3 id="1-所用库"><a href="#1-所用库" class="headerlink" title="1. 所用库"></a>1. 所用库</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Import the libs</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> random <span class="keyword">as</span> rd</span><br></pre></td></tr></table></figure>
+<h3 id="2-常量定义"><a href="#2-常量定义" class="headerlink" title="2. 常量定义"></a>2. 常量定义</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MIN_VAL = [<span class="number">-5.0</span>, <span class="number">-5.0</span>]            <span class="comment"># The minmum limit of variable</span></span><br><span class="line">MAX_VAL = [<span class="number">5.0</span>, <span class="number">5.0</span>]              <span class="comment"># The maxxmum limit of variable</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-TS类"><a href="#3-TS类" class="headerlink" title="3. TS类"></a>3. TS类</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TS</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">        TS class</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,vcount=<span class="number">2</span>,ccount=<span class="number">20</span>,tabuL=<span class="number">25</span>,iters=<span class="number">200</span>,tabu_objs=<span class="number">10</span>)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">            Initiate the parameters of TS</span></span><br><span class="line"><span class="string">            -----------------------------</span></span><br><span class="line"><span class="string">            Parameter:</span></span><br><span class="line"><span class="string">                vcount    : The number of variables</span></span><br><span class="line"><span class="string">                ccount    : The number of candidate solutions</span></span><br><span class="line"><span class="string">                tabuL     : Tabu length(tenure)</span></span><br><span class="line"><span class="string">                iters     : Number of iterations</span></span><br><span class="line"><span class="string">                tabu_objs : Number of tabu objects</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line"></span><br><span class="line">        self.vcount = vcount                                    <span class="comment"># The number of variables.</span></span><br><span class="line">        self.ccount = ccount                                    <span class="comment"># The number of candidate solutions.</span></span><br><span class="line">        self.iters = iters                                      <span class="comment"># Number of iterations, as the end rule.</span></span><br><span class="line">        self.tabu_objs = tabu_objs </span><br><span class="line">        self.tabu_list = [<span class="literal">None</span>]*self.tabu_objs                  <span class="comment"># Tabu list, used to store the tabu object.</span></span><br><span class="line">        self.tabu_len = tabuL                                   <span class="comment"># Tabu length.</span></span><br><span class="line">        self.tabu_len_list = np.array([<span class="number">0</span>]*self.tabu_objs)       <span class="comment"># Tabu length list, Corresponds to the Tabu list.</span></span><br><span class="line">        self.cur_solu = np.array([<span class="number">0.0</span>]*self.vcount)             <span class="comment"># The current solution.</span></span><br><span class="line">        self.best_solu = np.array([<span class="number">0.0</span>]*self.vcount)            <span class="comment"># The best solution.</span></span><br><span class="line">        self.trace = []                                         <span class="comment"># Record the route of best solution.</span></span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">valuate</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">            valuation function</span></span><br><span class="line"><span class="string">            ------------------</span></span><br><span class="line"><span class="string">            The valuation function as the rule of contempt is usually the objective function.</span></span><br><span class="line"><span class="string">            ------------------</span></span><br><span class="line"><span class="string">            Parameter:</span></span><br><span class="line"><span class="string">                x : The solution of the valuation function.</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Objective function</span></span><br><span class="line">        value = <span class="number">5</span>*np.cos(x[<span class="number">0</span>]*x[<span class="number">1</span>])+x[<span class="number">0</span>]*x[<span class="number">1</span>]+x[<span class="number">1</span>]**<span class="number">3</span></span><br><span class="line">        <span class="comment"># Return value</span></span><br><span class="line">        <span class="keyword">return</span> value</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update_Tabu</span><span class="params">(self, mode, index=None, solu=None)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">            upadte_Tabu function</span></span><br><span class="line"><span class="string">            --------------------</span></span><br><span class="line"><span class="string">            This function is used to update the tabu list and the tenure of tabu object.</span></span><br><span class="line"><span class="string">            --------------------</span></span><br><span class="line"><span class="string">            Parameter:</span></span><br><span class="line"><span class="string">                mode  :</span></span><br><span class="line"><span class="string">                index :</span></span><br><span class="line"><span class="string">                solu  :</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        </span><br><span class="line">        indices = []                               <span class="comment"># Store the index the value, which is equal to zero.</span></span><br><span class="line">        <span class="comment"># Update the tenure of tabu object.</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(self.tabu_len_list)):   </span><br><span class="line">            <span class="keyword">if</span> self.tabu_len_list[i] != <span class="number">0</span>:</span><br><span class="line">                self.tabu_len_list[i] -= <span class="number">1</span>         </span><br><span class="line">        <span class="comment"># The ralease mode</span></span><br><span class="line">        <span class="keyword">if</span> mode == <span class="string">'release'</span>:</span><br><span class="line">            self.sequence_Tabu(index)                 </span><br><span class="line">        <span class="comment"># The add mode</span></span><br><span class="line">        <span class="keyword">elif</span> mode == <span class="string">'add'</span>:</span><br><span class="line">            tabuObj = self.valuate(solu) </span><br><span class="line">            <span class="keyword">if</span> self.tabu_list[<span class="number">0</span>] == <span class="literal">None</span>:</span><br><span class="line">                self.sequence_Tabu(<span class="number">0</span>)</span><br><span class="line">            self.tabu_list[len(self.tabu_list)<span class="number">-1</span>] = tabuObj</span><br><span class="line">            self.tabu_len_list[len(self.tabu_list)<span class="number">-1</span>] = self.tabu_len</span><br><span class="line">        <span class="comment"># Update the tabu list depending on the content of the tabu_list_list.</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(self.tabu_len_list)):</span><br><span class="line">            <span class="keyword">if</span> self.tabu_len_list[i] == <span class="number">0</span>:</span><br><span class="line">                indices.append(i)</span><br><span class="line">        <span class="keyword">if</span> len(indices) == <span class="number">1</span>:</span><br><span class="line">            self.sequence_Tabu(indices[<span class="number">0</span>])</span><br><span class="line">        <span class="keyword">elif</span> len(indices) &gt; <span class="number">1</span>:</span><br><span class="line">            <span class="comment"># Part 1</span></span><br><span class="line">            maxindex = max(indices)                <span class="comment"># Maximum index</span></span><br><span class="line">            self.sequence_Tabu(maxindex)</span><br><span class="line">            <span class="comment"># Part 2</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> indices:</span><br><span class="line">                <span class="keyword">if</span> i != max(indices):</span><br><span class="line">                    self.tabu_list[i] = <span class="literal">None</span>       <span class="comment"># Set the tabu object as None.</span></span><br><span class="line">                    self.tabu_len_list[i] = <span class="number">0</span>      <span class="comment"># Set the tenure of tabu object as zero.</span></span><br><span class="line">            objs = []</span><br><span class="line">            objs1 = []</span><br><span class="line">            <span class="keyword">for</span> obj <span class="keyword">in</span> self.tabu_list[:maxindex]:</span><br><span class="line">                <span class="keyword">if</span> obj != <span class="literal">None</span>:</span><br><span class="line">                    objs.append(obj)</span><br><span class="line">            <span class="keyword">for</span> obj <span class="keyword">in</span> self.tabu_len_list[:maxindex]:</span><br><span class="line">                <span class="keyword">if</span> obj != <span class="number">0</span>:</span><br><span class="line">                    objs1.append(obj)</span><br><span class="line">            <span class="keyword">if</span> objs != []:</span><br><span class="line">                <span class="keyword">for</span> i <span class="keyword">in</span> range(len(objs)):</span><br><span class="line">                    self.tabu_list[maxindex-i<span class="number">-1</span>] = objs[i]</span><br><span class="line">                    self.tabu_len_list[maxindex-i<span class="number">-1</span>] = objs1[i]</span><br><span class="line">                <span class="keyword">for</span> i <span class="keyword">in</span> range(maxindex-len(objs)):</span><br><span class="line">                    self.tabu_list[i] = <span class="literal">None</span></span><br><span class="line">                    self.tabu_len_list[i] = <span class="number">0</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">for</span> i <span class="keyword">in</span> range(maxindex):</span><br><span class="line">                    self.tabu_list[i] = <span class="literal">None</span></span><br><span class="line">                    self.tabu_len_list[i] = <span class="number">0</span></span><br><span class="line">            </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sequence_Tabu</span><span class="params">(self, index)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">            sequence_Tabu function</span></span><br><span class="line"><span class="string">            ----------------------</span></span><br><span class="line"><span class="string">            Parameter:</span></span><br><span class="line"><span class="string">                index : The index of the tabu object to be deleted.</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> index != len(self.tabu_list)<span class="number">-1</span>:</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(len(self.tabu_list)<span class="number">-1</span>-index):</span><br><span class="line">                self.tabu_list[index+i] =  self.tabu_list[index+i+<span class="number">1</span>]</span><br><span class="line">                self.tabu_len_list[index+i] = self.tabu_len_list[index+i+<span class="number">1</span>]</span><br><span class="line">            self.tabu_list[len(self.tabu_list)<span class="number">-1</span>] = <span class="literal">None</span></span><br><span class="line">            self.tabu_len_list[len(self.tabu_list)<span class="number">-1</span>] = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">            run function</span></span><br><span class="line"><span class="string">            ------------</span></span><br><span class="line"><span class="string">            Execute the TS algorithm.</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Produce the initial solution and set the best soluiton.</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(self.vcount):</span><br><span class="line">            self.cur_solu[i] = rd.uniform(<span class="number">-2</span>,<span class="number">2</span>)</span><br><span class="line">            self.best_solu[i] = self.cur_solu[i]</span><br><span class="line">        <span class="comment"># Update the tabu list and the tenure of tabu object.</span></span><br><span class="line">        self.update_Tabu(<span class="string">'add'</span>, solu=self.cur_solu)</span><br><span class="line">        <span class="comment"># Iteration</span></span><br><span class="line">        counter = <span class="number">0</span>                                             <span class="comment"># The counter of iteration      </span></span><br><span class="line">        <span class="keyword">while</span> counter &lt; self.iters:</span><br><span class="line">            counter += <span class="number">1</span>                                        <span class="comment"># The counter add 1 when finishs a loop.</span></span><br><span class="line">            candi_solu = np.zeros((self.ccount, self.vcount))   <span class="comment"># Store the candidate solutions.</span></span><br><span class="line">            <span class="comment"># Select some candidate solutions from the near area of the current solution.</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(self.ccount):</span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> range(self.vcount):</span><br><span class="line">                    candi_solu[i,j] = self.cur_solu[j] + rd.uniform(<span class="number">-1</span>, <span class="number">1</span>)</span><br><span class="line">            <span class="comment"># Identify whether the candidate solutions are kept in the limited area.</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(self.vcount):</span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> range(self.ccount):</span><br><span class="line">                    <span class="keyword">if</span> candi_solu[j,i] &gt; MAX_VAL[i]:</span><br><span class="line">                        candi_solu[j,i] = MAX_VAL[i]</span><br><span class="line">                    <span class="keyword">elif</span> candi_solu[j,i] &lt; MIN_VAL[i]:</span><br><span class="line">                        candi_solu[j,i] = MIN_VAL[i]</span><br><span class="line">            isAll = <span class="literal">False</span>                                       <span class="comment"># A sign of all solutions kept in tabu list.</span></span><br><span class="line">            isPart = <span class="literal">False</span>                                      <span class="comment"># A sign of a part of solutions kept in tabu list.</span></span><br><span class="line">            count = [<span class="number">0</span>]*self.ccount</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(self.ccount):</span><br><span class="line">                <span class="keyword">for</span> k <span class="keyword">in</span> range(len(self.tabu_list)):</span><br><span class="line">                    <span class="keyword">if</span> self.valuate(candi_solu[i]) == self.tabu_list[k]:</span><br><span class="line">                        count[i] = <span class="number">1</span></span><br><span class="line">            temp = <span class="number">0</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> count:</span><br><span class="line">                <span class="keyword">if</span> i == <span class="number">1</span>:</span><br><span class="line">                    temp += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> temp == self.ccount:</span><br><span class="line">                isAll = <span class="literal">True</span></span><br><span class="line">            <span class="keyword">elif</span> temp &lt; self.ccount <span class="keyword">and</span> temp &gt; <span class="number">0</span>:</span><br><span class="line">                isPart = <span class="literal">True</span></span><br><span class="line">                </span><br><span class="line">            <span class="keyword">if</span> isAll == <span class="literal">True</span>:</span><br><span class="line">                <span class="comment">############################################</span></span><br><span class="line">                <span class="comment">#    Part1 : All solutions in Tabu list.   #</span></span><br><span class="line">                <span class="comment">############################################</span></span><br><span class="line">                temp_tabu_list = []</span><br><span class="line">                <span class="keyword">for</span> tabuObj <span class="keyword">in</span> self.tabu_list:</span><br><span class="line">                    <span class="keyword">if</span> tabuObj != <span class="literal">None</span>:</span><br><span class="line">                        temp_tabu_list.append(tabuObj)</span><br><span class="line">                index = np.argmin(np.array(temp_tabu_list))         <span class="comment"># Obtain the index of minimum value from the tabu list</span></span><br><span class="line">                temp_solu = np.array([<span class="number">0.0</span>]*self.vcount)</span><br><span class="line">                <span class="keyword">for</span> solu <span class="keyword">in</span> candi_solu:</span><br><span class="line">                    <span class="keyword">if</span> self.valuate(solu) == self.tabu_list[index]:</span><br><span class="line">                        temp_solu = solu</span><br><span class="line">                <span class="comment"># Update the current solution.</span></span><br><span class="line">                self.cur_solu = temp_solu</span><br><span class="line">                <span class="comment"># Update the best solution according to the valuate function and requirements.</span></span><br><span class="line">                <span class="keyword">if</span> self.valuate(self.cur_solu) &lt; self.valuate(self.best_solu):</span><br><span class="line">                    self.best_solu = self.cur_solu           </span><br><span class="line">                <span class="comment"># Update the tabu list and the tenure of tabu object.</span></span><br><span class="line">                self.update_Tabu(<span class="string">'release'</span>,index=index)</span><br><span class="line">                </span><br><span class="line">            <span class="keyword">elif</span> isPart == <span class="literal">True</span>:</span><br><span class="line">                <span class="comment">##################################################</span></span><br><span class="line">                <span class="comment">#    Part2 : A part of solutions in Tabu list.   #</span></span><br><span class="line">                <span class="comment">##################################################</span></span><br><span class="line">                isExistbest = <span class="literal">False</span></span><br><span class="line">                temp_bsolu = []</span><br><span class="line">                bsolu = np.array([<span class="number">0.0</span>]*self.vcount)</span><br><span class="line">                <span class="keyword">for</span> solu <span class="keyword">in</span> candi_solu:</span><br><span class="line">                    <span class="keyword">if</span> self.valuate(solu) &lt; self.valuate(self.best_solu):</span><br><span class="line">                        isExistbest = <span class="literal">True</span></span><br><span class="line">                        temp_bsolu.append(solu)</span><br><span class="line">                <span class="keyword">if</span> isExistbest == <span class="literal">True</span>:</span><br><span class="line">                    <span class="comment">###################################################################</span></span><br><span class="line">                    <span class="comment">#    Part2.1 : Exist the best solution in  candidate solutions.   #</span></span><br><span class="line">                    <span class="comment">#              Some of these exist in tabu list.                  #</span></span><br><span class="line">                    <span class="comment">###################################################################</span></span><br><span class="line">                    isInTabu = <span class="literal">False</span></span><br><span class="line">                    index = <span class="number">0</span></span><br><span class="line">                    <span class="comment">#</span></span><br><span class="line">                    <span class="keyword">if</span> len(temp_bsolu) == <span class="number">1</span>:</span><br><span class="line">                        bsolu = temp_bsolu[<span class="number">0</span>]</span><br><span class="line">                    <span class="keyword">elif</span> len(temp_bsolu) != <span class="number">1</span> <span class="keyword">and</span> len(temp_bsolu) != <span class="number">0</span>:</span><br><span class="line">                        bsolu = temp_bsolu[<span class="number">0</span>]</span><br><span class="line">                        <span class="keyword">for</span> solu <span class="keyword">in</span> temp_bsolu[<span class="number">1</span>:]:</span><br><span class="line">                            <span class="keyword">if</span> self.valuate(solu) &lt; self.valuate(bsolu):</span><br><span class="line">                                bsolu = solu</span><br><span class="line">                    <span class="comment">#</span></span><br><span class="line">                    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(self.tabu_list)):</span><br><span class="line">                        <span class="keyword">if</span> self.valuate(bsolu) == self.tabu_list[i]:</span><br><span class="line">                            isInTabu = <span class="literal">True</span></span><br><span class="line">                            index = i</span><br><span class="line">                    <span class="comment"># Update the current solution.</span></span><br><span class="line">                    self.cur_solu = bsolu</span><br><span class="line">                    <span class="comment"># Update the best solution.</span></span><br><span class="line">                    <span class="keyword">if</span> self.valuate(bsolu) &lt; self.valuate(self.best_solu):</span><br><span class="line">                        self.best_solu = bsolu</span><br><span class="line">                    <span class="comment"># </span></span><br><span class="line">                    <span class="keyword">if</span> isInTabu == <span class="literal">True</span>:</span><br><span class="line">                        <span class="comment"># Update the tabu list and the tenure of tabu object.</span></span><br><span class="line">                        self.update_Tabu(<span class="string">'release'</span>, index=index)</span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        index = len(self.tabu_list)<span class="number">-1</span></span><br><span class="line">                        <span class="comment"># Update the tabu list and the tenure of tabu object.</span></span><br><span class="line">                        self.update_Tabu(index, <span class="string">'add'</span>, solu=self.cur_solu)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="comment">#################################################################</span></span><br><span class="line">                    <span class="comment">#    Part2.2 : None the best solution in candidate solutions.   #</span></span><br><span class="line">                    <span class="comment">#              None solutions exist in tabu list.               #</span></span><br><span class="line">                    <span class="comment">#################################################################</span></span><br><span class="line">                    notInTabu = []</span><br><span class="line">                    <span class="keyword">for</span> solu <span class="keyword">in</span> candi_solu:</span><br><span class="line">                        count = <span class="number">0</span></span><br><span class="line">                        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(self.tabu_list)):</span><br><span class="line">                            <span class="keyword">if</span> self.valuate(solu) != self.tabu_list[i]:</span><br><span class="line">                                count += <span class="number">1</span></span><br><span class="line">                        <span class="keyword">if</span> count == len(self.tabu_list):</span><br><span class="line">                            notInTabu.append(solu)</span><br><span class="line">                    temp_solu = notInTabu[<span class="number">0</span>]</span><br><span class="line">                    <span class="keyword">if</span> len(notInTabu) != <span class="number">1</span>:</span><br><span class="line">                        <span class="keyword">for</span> solu <span class="keyword">in</span> notInTabu[<span class="number">1</span>:]:</span><br><span class="line">                            <span class="keyword">if</span> self.valuate(solu) &lt; self.valuate(temp_solu):</span><br><span class="line">                                temp_solu = solu</span><br><span class="line">                    <span class="comment"># Update the current solution according to the valuate function and requirements.</span></span><br><span class="line">                    <span class="keyword">if</span> self.valuate(temp_solu) &lt; self.valuate(self.cur_solu):</span><br><span class="line">                        self.cur_solu = temp_solu</span><br><span class="line">                        <span class="comment"># Update the tabu list and the tenure of tabu object.</span></span><br><span class="line">                        self.update_Tabu(<span class="string">'add'</span>, index=len(self.tabu_list)<span class="number">-1</span>, solu=self.cur_solu) </span><br><span class="line">                        <span class="comment"># Update the best solution according to the valuate function and requirements.</span></span><br><span class="line">                        <span class="keyword">if</span> self.valuate(self.cur_solu) &lt; self.valuate(self.best_solu):</span><br><span class="line">                            self.best_solu = self.cur_solu</span><br><span class="line">                </span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="comment">#############################################</span></span><br><span class="line">                <span class="comment">#    Part3 : None solutions in tabu list.   #</span></span><br><span class="line">                <span class="comment">#############################################</span></span><br><span class="line">                bcandi_solu = candi_solu[<span class="number">0</span>]</span><br><span class="line">                <span class="keyword">for</span> solu <span class="keyword">in</span> candi_solu[<span class="number">1</span>:]:</span><br><span class="line">                    <span class="keyword">if</span> self.valuate(solu) &lt; self.valuate(bcandi_solu):</span><br><span class="line">                        bcandi_solu = solu</span><br><span class="line">                <span class="comment"># Update the current solution according to the valuate function and requirements.</span></span><br><span class="line">                <span class="keyword">if</span> self.valuate(bcandi_solu) &lt; self.valuate(self.cur_solu):                    </span><br><span class="line">                    self.cur_solu = bcandi_solu                    </span><br><span class="line">                    <span class="comment"># Update the tabu list and the tenure of tabu object.</span></span><br><span class="line">                    self.update_Tabu(<span class="string">'add'</span>, index=len(self.tabu_list)<span class="number">-1</span>, solu=self.cur_solu)</span><br><span class="line">                    <span class="comment"># Update the best solution according to the valuate function and requirements.</span></span><br><span class="line">                    <span class="keyword">if</span> self.valuate(self.cur_solu) &lt; self.valuate(self.best_solu):</span><br><span class="line">                        self.best_solu = self.cur_solu                                                </span><br><span class="line">                </span><br><span class="line">            <span class="comment"># Add the best solution to the trace list</span></span><br><span class="line">            self.trace.append(self.valuate(self.best_solu))</span><br></pre></td></tr></table></figure>
+<h3 id="4-main函数"><a href="#4-main函数" class="headerlink" title="4. main函数"></a>4. main函数</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">        main function</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    ts = TS(iters=<span class="number">200</span>)</span><br><span class="line">    ts.run()</span><br><span class="line">    print(<span class="string">'最优解:'</span>, ts.best_solu)</span><br><span class="line">    print(<span class="string">'最小值'</span>, ts.valuate(ts.best_solu))</span><br><span class="line"></span><br><span class="line">    plt.plot(ts.trace, <span class="string">'r'</span>)</span><br><span class="line">    title = <span class="string">'TS: '</span> + str(ts.valuate(ts.best_solu))</span><br><span class="line">    plt.title(title)</span><br><span class="line">    plt.xlabel(<span class="string">"Number of iterations"</span>)</span><br><span class="line">    plt.ylabel(<span class="string">"Function values"</span>)</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure>
+<h2 id="五-代码链接"><a href="#五-代码链接" class="headerlink" title="五. 代码链接"></a>五. 代码链接</h2><blockquote>
+<p><a href="https://github.com/zhf026/Intelligent-algorithm.git" target="_blank" rel="noopener">具体代码参见Github</a></p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>书山有路勤为径，学海无涯苦作舟~</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById(&quot;QR&quot;); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="有何不可 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="有何不可 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/17/Hello-Hexo-Github/" rel="next" title="使用Hexo和Github搭建个人博客">
+                <i class="fa fa-chevron-left"></i> 使用Hexo和Github搭建个人博客
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/07/Python-name/" rel="prev" title="python的" __name__"">
+                python的"__name__" <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="有何不可">
+            
+              <p class="site-author-name" itemprop="name">有何不可</p>
+              <div class="site-description motion-element" itemprop="description">一个记录学习的博客~ ^.^</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/zhf026" title="GitHub &rarr; https://github.com/zhf026" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="mailto:zhf026@gmail.com" title="E-Mail &rarr; mailto:zhf026@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="https://blog.csdn.net/weixin_39124421" title="CSDN &rarr; https://blog.csdn.net/weixin_39124421" rel="noopener" target="_blank"><i class="fa fa-fw fa-cuttlefish"></i></a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-基本思想"><span class="nav-number">1.</span> <span class="nav-text">一. 基本思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-算法中涉及的一些概念"><span class="nav-number">2.</span> <span class="nav-text">二. 算法中涉及的一些概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-算法流程"><span class="nav-number">3.</span> <span class="nav-text">三. 算法流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-算法Python实现"><span class="nav-number">4.</span> <span class="nav-text">四. 算法Python实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-所用库"><span class="nav-number">4.1.</span> <span class="nav-text">1. 所用库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-常量定义"><span class="nav-number">4.2.</span> <span class="nav-text">2. 常量定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-TS类"><span class="nav-number">4.3.</span> <span class="nav-text">3. TS类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-main函数"><span class="nav-number">4.4.</span> <span class="nav-text">4. main函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五-代码链接"><span class="nav-number">5.</span> <span class="nav-text">五. 代码链接</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">有何不可</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
