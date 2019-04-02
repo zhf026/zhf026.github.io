@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="&amp;emsp;&amp;emsp; 关于Gurobi的Python API…">
+<meta name="keywords" content="Python,Gubobi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gurobi note （一）">
+<meta property="og:url" content="http://yoursite.com/2019/04/02/Gurobi_note_1/index.html">
+<meta property="og:site_name" content="有何不可">
+<meta property="og:description" content="&amp;emsp;&amp;emsp; 关于Gurobi的Python API…">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-04-02T13:23:00.950Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Gurobi note （一）">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp; 关于Gurobi的Python API…">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/02/Gurobi_note_1/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Gurobi note （一） | 有何不可</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">有何不可</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/02/Gurobi_note_1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="有何不可">
+      <meta itemprop="description" content="一个记录学习的博客~ ^.^">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="有何不可">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Gurobi note （一）
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-02 21:14:28 / 修改时间：21:23:00" itemprop="dateCreated datePublished" datetime="2019-04-02T21:14:28+08:00">2019-04-02</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Gurobi/" itemprop="url" rel="index"><span itemprop="name">Gurobi</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&emsp;&emsp; 关于Gurobi的Python API…<br><a id="more"></a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># import gurobipy lib</span></span><br><span class="line"><span class="keyword">from</span> gurobipy <span class="keyword">import</span> *</span><br></pre></td></tr></table></figure>
+<h2 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h2><blockquote>
+<p>The Gurobi optimizer employs a lazy update approach, so changes to<br>attributes don’t take effect until the next call to Model.update, Model.optimize, Model.write on the associated model.</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Initiate a model</span></span><br><span class="line">model = Model()</span><br></pre></td></tr></table></figure>
+<h2 id="Var-Gurobi-variable-object"><a href="#Var-Gurobi-variable-object" class="headerlink" title="Var(Gurobi variable object)"></a>Var(Gurobi variable object)</h2><p>&emsp;&emsp; In Gurobi, we can create a variable object by adding a variable to a model rather than by using a Var constrcutor.<br>&emsp;&emsp; There are two ways to create variables, as follow, and the <code>Model.addVars</code> refers the <strong>tupledict section</strong></p>
+<blockquote>
+<p>Model.addVar(lb=0.0, ub=GRB.INFINITY, obj=0.0, vtype=GRB.CONTINUOUS, name=””, column=None)</p>
+</blockquote>
+<blockquote>
+<p>Model.addVars(*indices, lb=0.0, ub=GRB.INFINITY, obj=0.0, vtype=GRB.CONTINUOUS, name=””)</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Create decision variables</span></span><br><span class="line">x = model.addVar(lb=<span class="number">1.0</span>, ub=GRB.INFINITY, obj=<span class="number">0.0</span>, vtype=GRB.CONTINUOUS, name=<span class="string">"x"</span>)</span><br><span class="line">y = model.addVar(name=<span class="string">"y"</span>)</span><br><span class="line">z = model.addVar(name=<span class="string">"z"</span>)</span><br><span class="line">x_bin = model.addVar(vtype=GRB.BINARY)  <span class="comment"># Binary variable</span></span><br><span class="line">y_bin = model.addVar(vtype=GRB.BINARY)  <span class="comment"># Binary variable</span></span><br><span class="line">print(x,y,z)</span><br><span class="line"><span class="comment"># Update model</span></span><br><span class="line">model.update()  </span><br><span class="line">print(x,y,z)</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;gurobi.Var *Awaiting Model Update*&gt; &lt;gurobi.Var *Awaiting Model Update*&gt; &lt;gurobi.Var *Awaiting Model Update*&gt;
+&lt;gurobi.Var x&gt; &lt;gurobi.Var y&gt; &lt;gurobi.Var z&gt;
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Get attribute of variable</span></span><br><span class="line">[(x.getAttr(GRB.Attr.LB), x.getAttr(<span class="string">"ub"</span>)), ((y.getAttr(GRB.Attr.LB), y.getAttr(<span class="string">"ub"</span>)))]</span><br></pre></td></tr></table></figure>
+<pre><code>[(1.0, 1e+100), (0.0, 1e+100)]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Set attribute of variable</span></span><br><span class="line">x.setAttr(<span class="string">"lb"</span>, <span class="number">5</span>)</span><br><span class="line">x.setAttr(<span class="string">"ub"</span>, <span class="number">100</span>)</span><br><span class="line"><span class="comment"># Update model</span></span><br><span class="line">model.update()</span><br><span class="line">x.getAttr(<span class="string">"lb"</span>), x.getAttr(<span class="string">"ub"</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>(5.0, 100.0)
+</code></pre><h2 id="Constr-Gurobi-constraint-object"><a href="#Constr-Gurobi-constraint-object" class="headerlink" title="Constr(Gurobi constraint object)"></a>Constr(Gurobi constraint object)</h2><p>&emsp;&emsp; In Gurobi, we can create a constraint object by adding a constraint to a model rather than by using a Constr constrcutor.<br>&emsp;&emsp; There are two ways, as follow,</p>
+<blockquote>
+<p>Model.addConstr(lhs, sense=None, rhs=None, name=”” )</p>
+</blockquote>
+<blockquote>
+<p>Model.addConstrs(generator, name=””)</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Add constraints to a model</span></span><br><span class="line">c0 = model.addConstr(lhs=x+y, sense=GRB.EQUAL, rhs=<span class="number">4</span>, name=<span class="string">"c0"</span>)</span><br><span class="line">c1 = model.addConstr(lhs=z, sense=GRB.GREATER_EQUAL, rhs=<span class="number">0</span>, name=<span class="string">"c1"</span>)</span><br><span class="line"><span class="comment"># Update model</span></span><br><span class="line">model.update()</span><br><span class="line">c0, c1</span><br></pre></td></tr></table></figure>
+<pre><code>(&lt;gurobi.Constr c0&gt;, &lt;gurobi.Constr c1&gt;)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Get </span></span><br><span class="line">c0.getAttr(GRB.Attr.RHS)</span><br></pre></td></tr></table></figure>
+<pre><code>4.0
+</code></pre><h2 id="QConstr-Gurobi-quadratic-constraint-object"><a href="#QConstr-Gurobi-quadratic-constraint-object" class="headerlink" title="QConstr(Gurobi quadratic constraint object)"></a>QConstr(Gurobi quadratic constraint object)</h2><p>&emsp;&emsp; Add a quadratic constraint to a model, as follow,</p>
+<blockquote>
+<p>Model.addQConst(lhs, sense=None, rhs=None, name=””) </p>
+</blockquote>
+<p>&emsp;&emsp; <strong>Important note:</strong><br>&emsp;&emsp;The algorithms that Gurobi uses to solve quadratically constrained problems can only handle certain types of quadratic constraints. Constraints of the following forms are always accepted:<br>$$ x^TQx + q^Tx &lt;= b $$<br>$$ x^Tx &lt;= y^2 $$<br>$$ x^Tx &lt;= yz $$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Add quadratic constraints to a model</span></span><br><span class="line">qc0 = model.addQConstr(lhs=x*x+y*y, sense=GRB.LESS_EQUAL, rhs=z*z, name=<span class="string">"qc0"</span>)</span><br><span class="line"><span class="comment"># Update model</span></span><br><span class="line">model.update()</span><br><span class="line">qc0</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;gurobi.QConstr qc0&gt;
+</code></pre><h2 id="GenConstr-Gurobi-general-constraint-object"><a href="#GenConstr-Gurobi-general-constraint-object" class="headerlink" title="GenConstr(Gurobi general constraint object)"></a>GenConstr(Gurobi general constraint object)</h2><p>&emsp;&emsp; General constraints are always associated with a particular model. You add a general constraint to a model either by using <code>Model.addGenConstr</code>, or by using <code>Model.addConstr</code> or <code>Model.addConstrs plus a general constraint helper function</code>).<br>&emsp;&emsp; Refer the <strong>TempConstr section</strong> to add a general constraint to a model.</p>
+<h2 id="TempConstr-Gurobi-temporary-constraint-object"><a href="#TempConstr-Gurobi-temporary-constraint-object" class="headerlink" title="TempConstr(Gurobi temporary constraint object)"></a>TempConstr(Gurobi temporary constraint object)</h2><p>&emsp;&emsp; Objects of this class are created as intermediate results when building constraints using overloaded operators.<br>&emsp;&emsp; The TempConstr object allows you to create several different types of constraints:</p>
+<ul>
+<li>Linear Constraint</li>
+<li>Ranged Linear Constraint</li>
+<li>Quadratic Constraint</li>
+<li>Absolute Value Constraint</li>
+<li>Logical Constraint</li>
+<li>Min or Max Constraint</li>
+<li>Indicator Constraint</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Create a TempConstr object</span></span><br><span class="line"><span class="comment"># (Note: Expr1 and Expr2 is a LinExpr, Var, constant)</span></span><br><span class="line">x + y &lt;= <span class="number">1</span>              <span class="comment"># Linear Constr         --&gt; Expr1 sense(&lt;=,==,&gt;=) Expr2</span></span><br><span class="line"></span><br><span class="line">x + y == [<span class="number">0</span>, <span class="number">10</span>]        <span class="comment"># Ranged Linear Constr  --&gt; LinExpr == [constan1, constant2]</span></span><br><span class="line"></span><br><span class="line">x*x + y*y &lt;= <span class="number">3</span>          <span class="comment"># Quad Constr           --&gt; Expr1 sense Expr2 (Note: must have a QuadExpr)</span></span><br><span class="line"></span><br><span class="line">x == abs_(y)            <span class="comment"># Absolute Value Constr --&gt; var1 == abs_(var2)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># (Note: A is a binary Var; B is a binary Var, a list of binary Var, or a tupledict of binary Var)</span></span><br><span class="line">x_bin == or_(y_bin)     <span class="comment"># Logical Constr        --&gt; A == or_(B)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># (Note: x is a Var; y is a Var, a list of Var and constant, or a tupledict of Var)</span></span><br><span class="line">x == max_(y, z)         <span class="comment"># MIN/MAX Constr        --&gt; x == min_(y) </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># (Note: x is a binary Var; b is 0 or 1; Expr1 and Expr2 is a LinExpr, Var, constant)</span></span><br><span class="line">(x_bin == <span class="number">1</span>) &gt;&gt; (y + z &lt;= <span class="number">5</span>) <span class="comment"># Indicator Constr --&gt; (x == b) &gt;&gt; (Expr1 sense Expr2)</span></span><br><span class="line">      </span><br><span class="line"><span class="comment"># Add a general constraint to a mmodel</span></span><br><span class="line">model.addConstr(x + y &lt;= z)</span><br><span class="line">model.update()</span><br></pre></td></tr></table></figure>
+<h2 id="SOS-Gurobi-SOS-constraint-object"><a href="#SOS-Gurobi-SOS-constraint-object" class="headerlink" title="SOS(Gurobi SOS constraint object)"></a>SOS(Gurobi SOS constraint object)</h2><p>&emsp;&emsp; SOS constraints are always associated with a particular model. You create an SOS object by adding an SOS constraint to a model (using <code>Model.addSOS</code>), rather than by using an SOS constructor. Similarly, SOS constraints are removed using the <code>Model.remove</code> method.<br>&emsp;&emsp; An SOS constraint can be of type 1 or 2 (<code>GRB.SOS_TYPE1</code> or <code>GRB.SOS_TYPE2</code>). A type 1 SOS constraint is a set of variables where at most one variable in the set may take a value other than zero. A type 2 SOS constraint is an ordered set of variables where at most two variables in the set may take non-zero values. If two take non-zero values, they must be contiguous in the ordered set.</p>
+<h2 id="LinExpr-Gurobi-linear-expression-object"><a href="#LinExpr-Gurobi-linear-expression-object" class="headerlink" title="LinExpr(Gurobi linear expression object)"></a>LinExpr(Gurobi linear expression object)</h2><p>&emsp;&emsp;Build linear expression, there are two ways, as follow,</p>
+<blockquote>
+<p>LinExpr(arg1=0.0, arg2=None)</p>
+</blockquote>
+<blockquote>
+<p>variables + overloaded operators</p>
+</blockquote>
+<p>&emsp;&emsp; The cost of building expressions depends heavily on the approach you use,  you should be aware of a few efficiency issues when building large expressions:</p>
+<ul>
+<li>Avoid using Python <code>sum</code> function.</li>
+<li>Avoid using <code>expr+= x</code> in a loop.</li>
+<li>Use the <code>quicksum</code> function when build a large expression.</li>
+<li>The two most efficient ways to build large linear expressions are <code>addTerms</code> or the <code>LinExpr()</code> constructor.</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Build linear expressions</span></span><br><span class="line"><span class="comment"># method 1</span></span><br><span class="line">expr1 = LinExpr(<span class="number">3</span>)             <span class="comment"># constant</span></span><br><span class="line">expr2 = LinExpr(<span class="number">2</span>*x+y+z)       <span class="comment"># variables</span></span><br><span class="line">expr3 = LinExpr(expr1+expr2)   <span class="comment"># expr</span></span><br><span class="line">expr4 = LinExpr([<span class="number">4</span>, <span class="number">12</span>], [x, y])</span><br><span class="line">expr5 = LinExpr([(<span class="number">0.5</span>, x), (<span class="number">1.2</span>, y), (<span class="number">2.5</span>, z)])</span><br><span class="line"><span class="comment"># method 2</span></span><br><span class="line">expr6 = x + y + z    </span><br><span class="line"><span class="comment"># 打印表达式</span></span><br><span class="line">print(<span class="string">'expr1:'</span>, expr1) </span><br><span class="line">print(<span class="string">'expr2:'</span>, expr2)</span><br><span class="line">print(<span class="string">'expr3:'</span>, expr3)</span><br><span class="line">print(<span class="string">'expr4:'</span>, expr4)</span><br><span class="line">print(<span class="string">'expr5:'</span>, expr5)</span><br><span class="line">print(<span class="string">'expr6:'</span>, expr6)</span><br></pre></td></tr></table></figure>
+<pre><code>expr1: &lt;gurobi.LinExpr: 3.0&gt;
+expr2: &lt;gurobi.LinExpr: 2.0 x + y + z&gt;
+expr3: &lt;gurobi.LinExpr: 3.0 + 2.0 x + y + z&gt;
+expr4: &lt;gurobi.LinExpr: 4.0 x + 12.0 y&gt;
+expr5: &lt;gurobi.LinExpr: 0.5 x + 1.2 y + 2.5 z&gt;
+expr6: &lt;gurobi.LinExpr: x + y + z&gt;
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># LinExpr </span></span><br><span class="line"><span class="comment"># LinExpr.add(expr, mult=1.0)</span></span><br><span class="line">expr1.add(x, <span class="number">3.0</span>)</span><br><span class="line">print(<span class="string">'expr1:'</span>, expr1)</span><br><span class="line"><span class="comment"># LinExpr.addConstant(c)</span></span><br><span class="line">expr1.addConstant(<span class="number">10</span>)</span><br><span class="line">print(<span class="string">'expr1:'</span>, expr1)</span><br><span class="line"><span class="comment"># LinExpr.addTerms (coeffs, vars)</span></span><br><span class="line">expr1.addTerms([<span class="number">6</span>,<span class="number">9</span>], [y,z])</span><br><span class="line">print(<span class="string">'expr1:'</span>, expr1)</span><br><span class="line"><span class="comment"># LinExpr.copy()</span></span><br><span class="line">expr7 = expr1.copy()</span><br><span class="line">print(<span class="string">'expr7:'</span>, expr7)</span><br><span class="line"><span class="comment"># LinExpr.size()</span></span><br><span class="line">item_num = expr7.size()</span><br><span class="line">print(<span class="string">'expr7 items:'</span>, item_num)</span><br></pre></td></tr></table></figure>
+<pre><code>expr1: &lt;gurobi.LinExpr: 3.0 + 3.0 x&gt;
+expr1: &lt;gurobi.LinExpr: 13.0 + 3.0 x&gt;
+expr1: &lt;gurobi.LinExpr: 13.0 + 3.0 x + 6.0 y + 9.0 z&gt;
+expr7: &lt;gurobi.LinExpr: 13.0 + 3.0 x + 6.0 y + 9.0 z&gt;
+expr7 items: 3
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># LinExpr.getConstant()</span></span><br><span class="line">print(expr7.getConstant())</span><br><span class="line"><span class="comment"># LinExpr.getCoeff(i)</span></span><br><span class="line">print(expr7.getCoeff(<span class="number">0</span>), expr7.getCoeff(<span class="number">1</span>), expr7.getCoeff(<span class="number">2</span>))</span><br><span class="line"><span class="comment"># LinExpr.getVar(i)</span></span><br><span class="line">print(expr7.getVar(<span class="number">0</span>), expr7.getVar(<span class="number">1</span>), expr7.getVar(<span class="number">2</span>))</span><br><span class="line"><span class="comment"># LinExpr.remove(item)</span></span><br><span class="line">expr8 = expr7.copy()</span><br><span class="line">expr8.remove(y)</span><br><span class="line">print(<span class="string">'expr8:'</span> ,expr8)</span><br></pre></td></tr></table></figure>
+<pre><code>13.0
+3.0 6.0 9.0
+&lt;gurobi.Var x&gt; &lt;gurobi.Var y&gt; &lt;gurobi.Var z&gt;
+expr8: &lt;gurobi.LinExpr: 13.0 + 3.0 x + 9.0 z&gt;
+</code></pre><h2 id="QuadExpr-Gurobi-quadratic-expression-object"><a href="#QuadExpr-Gurobi-quadratic-expression-object" class="headerlink" title="QuadExpr(Gurobi quadratic expression object)"></a>QuadExpr(Gurobi quadratic expression object)</h2><p>&emsp;&emsp; A quadratic expression consists of a linear expression plus a list of coefficient-variable-variable triples that capture the quadratic terms. Quadratic expressions are used to build quadratic objective functions and quadratic constraints.  Expressions can be built from constants, variables, or from other expressions.<br>&emsp;&emsp; The cost of building expressions depends heavily on the approach you use,  you should be aware of a few efficiency issues when building large expressions:</p>
+<ul>
+<li>Avoid using the Python <code>sum</code> function..</li>
+<li>Avoid using <code>expr = expr + x*x</code> in a loop.</li>
+<li>Use the <code>quicksum</code> function when build a large expression.</li>
+<li>The most efficient way to build a large quadratic expression is with a single call to <code>addTerms</code>.</li>
+</ul>
+<p>&emsp;&emsp; Build a quadratic expression, as follow,</p>
+<blockquote>
+<p>QuadExpr(expr=None)</p>
+</blockquote>
+<blockquote>
+<p>variables + overloadedoperators</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Build quadratic expressions</span></span><br><span class="line"><span class="comment"># Method 1</span></span><br><span class="line">qexpr1 = QuadExpr(<span class="number">1</span>)</span><br><span class="line">qexpr2 = QuadExpr(expr=x*y+y+z)</span><br><span class="line"><span class="comment"># Method 2</span></span><br><span class="line">qexpr3 = x*x + y*y + z*z + <span class="number">3</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">print(<span class="string">'qexpr1:'</span>, qexpr1, <span class="string">'item_num:'</span>, qexpr1.size())</span><br><span class="line">print(<span class="string">'qexpr2:'</span>, qexpr2, <span class="string">'item_num:'</span>, qexpr2.size())</span><br><span class="line">print(<span class="string">'qexpr3:'</span>, qexpr3, <span class="string">'item_num:'</span>, qexpr3.size())</span><br></pre></td></tr></table></figure>
+<pre><code>qexpr1: &lt;gurobi.QuadExpr: 1.0&gt; item_num: 0
+qexpr2: &lt;gurobi.QuadExpr: y + z + [ x * y ]&gt; item_num: 1
+qexpr3: &lt;gurobi.QuadExpr: 3.0 + [ x ^ 2 + y ^ 2 + z ^ 2 ]&gt; item_num: 3
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Quad.addTerms(coeffs, vars, vars2=None)</span></span><br><span class="line">qexpr1.addTerms([<span class="number">2.0</span>, <span class="number">3.0</span>, <span class="number">1.5</span>], [x, y, z], [y, z, x])</span><br><span class="line">print(qexpr1)</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;gurobi.QuadExpr: 1.0 + [ 2.0 x * y + 3.0 y * z + 1.5 z * x ]&gt;
+</code></pre><h2 id="GenExpr-Gurobi-general-expression-object"><a href="#GenExpr-Gurobi-general-expression-object" class="headerlink" title="GenExpr(Gurobi general expression object)"></a>GenExpr(Gurobi general expression object)</h2><p>&emsp;&emsp; Objects of this class are created by a set of <code>general constraint helper functions</code> functions(i.e. <code>max_()</code>,<code>min_()</code>,<code>and_()</code>,<code>or_()</code>).<br>&emsp;&emsp; GenExpr object is used in conjunction with overloaded operators to build <code>TempConstr</code> objects, which are then passed to <code>addConstr</code> or <code>addConstrs</code> to build general constraints.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Create a GenExpr </span></span><br><span class="line">gexpr1 = max_(x, y)</span><br><span class="line">gexpr2 = min_(x, y)</span><br><span class="line">gexpr3 = and_(x_bin, y_bin)</span><br><span class="line">gexpr4 = or_(x_bin, y_bin)</span><br><span class="line">gexpr5 = abs_(x)</span><br><span class="line">print(type(gexpr1))</span><br><span class="line">print(type(gexpr2))</span><br><span class="line">print(type(gexpr3))</span><br><span class="line">print(type(gexpr4))</span><br><span class="line">print(type(gexpr5))</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;class &apos;gurobipy.GenExpr&apos;&gt;
+&lt;class &apos;gurobipy.GenExpr&apos;&gt;
+&lt;class &apos;gurobipy.GenExpr&apos;&gt;
+&lt;class &apos;gurobipy.GenExpr&apos;&gt;
+&lt;class &apos;gurobipy.GenExpr&apos;&gt;
+</code></pre><h2 id="Callbacks-Gurobi-callback-class"><a href="#Callbacks-Gurobi-callback-class" class="headerlink" title="Callbacks(Gurobi callback class)"></a>Callbacks(Gurobi callback class)</h2><p>&emsp;&emsp; A callback is a user function that is called periodically by the Gurobi optimizer in order to allow the user to query or modify the state of the optimization.<br>&emsp;&emsp; More precisely, if you pass a function that takes two arguments (<code>model</code> and <code>where</code>) as the argument to <code>Model.optimize</code>, your function will be called during the optimization. Your callback function can then call <code>Model.cbGet</code> to query the optimizer  or details on the state of the optimization.<br>&emsp; &emsp; The Gurobi callback class provides a set of constants that are used within the user callback function. The first set of constants in this class list the options for the <code>where</code> argument to the user callback function. The <code>where</code> argument indicates from where in the optimization process the user callback is being called. The other set of constants in this class list the options for the <code>what</code> argument to <code>Model.cbGet</code>. The <code>what</code> argument is used by the user callback to indicate what piece of status information it would like to retrieve.<br>&emsp;&emsp; When solving a model using multiple threads, note that the user callback is only ever called from a single thread, so you don’t need to worry about the thread safety of your callback.</p>
+<h2 id="tuplelist-Gurobi-tuple-list"><a href="#tuplelist-Gurobi-tuple-list" class="headerlink" title="tuplelist(Gurobi tuple list)"></a>tuplelist(Gurobi tuple list)</h2><p>&emsp;&emsp; This is a sub-class of the Python list class that is designed to efficiently support a usage pattern that is quite common when building optimization models. The tuplelist is a Python list and the elements of the list is Python tuple. All tuples in a tuplelist must be the same length.<br>&emsp;&emsp; In particular, if a tuplelist is populated with a list of tuples, the <code>select</code> function on this class efficiently selects tuples whose values match specified values in specified tuple fields.<br>&emsp;&emsp; You generally build tuplelist objects in the same way you would build standard Python lists. For example, you can use the <code>+=</code> operator to append a new list of items to an existing tuplelist, or the <code>+</code> operator to concatenate a pair of tuplelist objects. You can also call the <code>append</code>, <code>extend</code>, <code>insert</code>, <code>pop</code>, and <code>remove</code>functions.<br>&emsp;&emsp; To access the members of a tuplelist, you also use standard list functions.<br>&emsp;&emsp; Note that tuplelist objects build and maintain a set of internal data structures to support efficient select operations. If you wish to reclaim the storage associated with these data structures, you can call the <code>clean</code> function.<br>&emsp;&emsp; A tuplelist is designed to store tuples containing scalar values (int, float, string, …) rather than tuples containing tuples.  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Create tuplelist</span></span><br><span class="line"><span class="comment"># tuplelist(list)</span></span><br><span class="line">tulist1 = tuplelist([(<span class="number">1</span>,<span class="number">2</span>,<span class="string">'z'</span>), (<span class="string">'z'</span>,<span class="string">'h'</span>,<span class="string">'f'</span>), (<span class="number">1</span>,<span class="number">6</span>,<span class="string">'z'</span>), (<span class="string">'A'</span>, <span class="number">2</span>, <span class="number">5</span>)])</span><br><span class="line"><span class="comment"># tuplelist.select(pattern)</span></span><br><span class="line">tulist2 = tulist1.select(<span class="number">1</span>, <span class="string">'*'</span>, <span class="string">'z'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Print tulist1</span></span><br><span class="line">print(<span class="string">'tulist1 len:'</span>, len(tulist1))</span><br><span class="line">print(<span class="string">'tulist1:'</span> ,tulist1)</span><br><span class="line">print(tulist1[<span class="number">0</span>], tulist1[<span class="number">0</span>][<span class="number">1</span>])</span><br><span class="line">print(<span class="string">'='</span>*<span class="number">25</span>)</span><br><span class="line"><span class="comment"># Print tulist2</span></span><br><span class="line">print(<span class="string">'tulist2:'</span> ,tulist2)</span><br></pre></td></tr></table></figure>
+<pre><code>tulist1 len: 4
+tulist1: &lt;gurobi.tuplelist (4 tuples, 3 values each):
+ ( 1 , 2 , z )
+ ( z , h , f )
+ ( 1 , 6 , z )
+ ( A , 2 , 5 )
+&gt;
+(1, 2, &apos;z&apos;) 2
+=========================
+tulist2: &lt;gurobi.tuplelist (2 tuples, 3 values each):
+ ( 1 , 2 , z )
+ ( 1 , 6 , z )
+&gt;
+</code></pre><h2 id="tupledict-Gurobi-tuple-dict"><a href="#tupledict-Gurobi-tuple-dict" class="headerlink" title="tupledict(Gurobi tuple dict)"></a>tupledict(Gurobi tuple dict)</h2><p>&emsp;&emsp; This is a sub-class of the Python dict class that is designed to efficiently support a usage pattern that is quite common when building optimization models. In particular, a tupledict is a Python dict where the keys are stored as a Gurobi tuplelist, and where the values are typically Gurobi Var objects.<br>&emsp;&emsp; Objects of this class make it easier to build linear expressions on sets of Gurobi variables, using <code>tuplelist.select()</code> syntax and semantics.<br>&emsp;&emsp; You typically build a tupledict by calling <code>Model.addVars</code>. Once you’ve created a tupledict object <code>d</code>, you can use <code>d.sum()</code> to create a linear expression that captures the sum of the variables in the tupledict. You can also use a command like <code>d.sum(1, ’*’, 5)</code> to create a sum over a subset of the variables in tupledict. You can also use <code>d.prod(coeff)</code> to create a linear expression where the coefficients are pulled from the argument dict.<br>&emsp;&emsp; To access the members of a tupledict, you can use standard dict indexing.<br>&emsp;&emsp; Note that a tupledict key must be a tuple of scalar values <code>(int, float, string, ...)</code>. Thus, you can use <code>(1, 2.0, ’abc’)</code> as a key, but you can’t use <code>((1, 2.0), ’abc’)</code>.<br>&emsp;&emsp; Note that tupledict objects build and maintain a set of internal data structures to support efficient select operations. If you wish to reclaim the storage associated with these data structures,<br>you can call the <code>clean</code> function.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Create tupledict</span></span><br><span class="line"><span class="comment"># Method1 -- tupledict(args, kwargs)</span></span><br><span class="line">tudict1 = tupledict([((<span class="number">1</span>,<span class="number">2</span>),<span class="string">'zhf'</span>), ((<span class="number">1</span>,<span class="string">'z'</span>),[<span class="number">2010</span>,<span class="number">1218</span>]), ((<span class="string">'w'</span>,<span class="string">'z'</span>),(<span class="string">'zhf'</span>,<span class="string">'wjq'</span>))])</span><br><span class="line"><span class="comment"># Method2 -- Model.addVars()</span></span><br><span class="line">tudict2 = model.addVars([(<span class="number">1</span>,<span class="number">2</span>), (<span class="number">1</span>,<span class="number">3</span>), (<span class="number">2</span>,<span class="number">3</span>)])</span><br><span class="line">model.update()</span><br><span class="line"><span class="comment"># Print tudic1</span></span><br><span class="line">print(<span class="string">'tudict1:'</span>, tudict1)</span><br><span class="line">print(<span class="string">'keys:'</span>, tudict1.keys())</span><br><span class="line">print(<span class="string">'values:'</span>, tudict1.values())</span><br><span class="line">print(<span class="string">'='</span>*<span class="number">25</span>)</span><br><span class="line"><span class="comment"># Print tudict2</span></span><br><span class="line">print(<span class="string">'tudict2:'</span>, tudict2)</span><br><span class="line">print(<span class="string">'keys:'</span>, tudict2.keys())</span><br><span class="line">print(<span class="string">'values:'</span>, tudict2.values())</span><br></pre></td></tr></table></figure>
+<pre><code>tudict1: {(1, 2): &apos;zhf&apos;, (1, &apos;z&apos;): [2010, 1218], (&apos;w&apos;, &apos;z&apos;): (&apos;zhf&apos;, &apos;wjq&apos;)}
+keys: &lt;gurobi.tuplelist (3 tuples, 2 values each):
+ ( 1 , 2 )
+ ( 1 , z )
+ ( w , z )
+&gt;
+values: [&apos;zhf&apos;, [2010, 1218], (&apos;zhf&apos;, &apos;wjq&apos;)]
+=========================
+tudict2: {(1, 2): &lt;gurobi.Var C5&gt;, (1, 3): &lt;gurobi.Var C6&gt;, (2, 3): &lt;gurobi.Var C7&gt;}
+keys: &lt;gurobi.tuplelist (3 tuples, 2 values each):
+ ( 1 , 2 )
+ ( 1 , 3 )
+ ( 2 , 3 )
+&gt;
+values: [&lt;gurobi.Var C5&gt;, &lt;gurobi.Var C6&gt;, &lt;gurobi.Var C7&gt;]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Create LinExpr  </span></span><br><span class="line"><span class="comment"># tupledict.sum(pattern)</span></span><br><span class="line">tudict_expr1 = tudict2.sum()</span><br><span class="line">tudict_expr2 = tudict2.sum(<span class="number">1</span>, <span class="string">'*'</span>)</span><br><span class="line">tudict_expr3 = tudict2.sum(<span class="string">'*'</span>, <span class="number">3</span>)</span><br><span class="line">tudict_expr4 = tudict2.sum(<span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="comment"># Print LinExpr</span></span><br><span class="line">print(<span class="string">'tudict_expr1:'</span>, tudict_expr1)</span><br><span class="line">print(<span class="string">'tudict_expr2:'</span>, tudict_expr2)</span><br><span class="line">print(<span class="string">'tudict_expr3:'</span>, tudict_expr3)</span><br><span class="line">print(<span class="string">'tudict_expr4:'</span>, tudict_expr4)</span><br></pre></td></tr></table></figure>
+<pre><code>tudict_expr1: &lt;gurobi.LinExpr: C5 + C6 + C7&gt;
+tudict_expr2: &lt;gurobi.LinExpr: C5 + C6&gt;
+tudict_expr3: &lt;gurobi.LinExpr: C6 + C7&gt;
+tudict_expr4: &lt;gurobi.LinExpr: C7&gt;
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># tupledict.select(pattern)</span></span><br><span class="line">print(tudict1.select())</span><br><span class="line">print(tudict1.select(<span class="number">1</span>, <span class="string">'*'</span>))</span><br><span class="line">print(tudict1.select(<span class="string">'*'</span>, <span class="string">'z'</span>))</span><br></pre></td></tr></table></figure>
+<pre><code>[&apos;zhf&apos;, [2010, 1218], (&apos;zhf&apos;, &apos;wjq&apos;)]
+[&apos;zhf&apos;, [2010, 1218]]
+[[2010, 1218], (&apos;zhf&apos;, &apos;wjq&apos;)]
+</code></pre>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>书山有路勤为径，学海无涯苦作舟~</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById(&quot;QR&quot;); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="有何不可 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="有何不可 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/Gubobi/" rel="tag"># Gubobi</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/13/CCHP/" rel="next" title="Combined cooling heating and power(CCHP)">
+                <i class="fa fa-chevron-left"></i> Combined cooling heating and power(CCHP)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="有何不可">
+            
+              <p class="site-author-name" itemprop="name">有何不可</p>
+              <div class="site-description motion-element" itemprop="description">一个记录学习的博客~ ^.^</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/zhf026" title="GitHub &rarr; https://github.com/zhf026" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="mailto:zhf026@gmail.com" title="E-Mail &rarr; mailto:zhf026@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="https://blog.csdn.net/weixin_39124421" title="CSDN &rarr; https://blog.csdn.net/weixin_39124421" rel="noopener" target="_blank"><i class="fa fa-fw fa-cuttlefish"></i></a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Model"><span class="nav-number">1.</span> <span class="nav-text">Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Var-Gurobi-variable-object"><span class="nav-number">2.</span> <span class="nav-text">Var(Gurobi variable object)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Constr-Gurobi-constraint-object"><span class="nav-number">3.</span> <span class="nav-text">Constr(Gurobi constraint object)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QConstr-Gurobi-quadratic-constraint-object"><span class="nav-number">4.</span> <span class="nav-text">QConstr(Gurobi quadratic constraint object)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GenConstr-Gurobi-general-constraint-object"><span class="nav-number">5.</span> <span class="nav-text">GenConstr(Gurobi general constraint object)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TempConstr-Gurobi-temporary-constraint-object"><span class="nav-number">6.</span> <span class="nav-text">TempConstr(Gurobi temporary constraint object)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SOS-Gurobi-SOS-constraint-object"><span class="nav-number">7.</span> <span class="nav-text">SOS(Gurobi SOS constraint object)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LinExpr-Gurobi-linear-expression-object"><span class="nav-number">8.</span> <span class="nav-text">LinExpr(Gurobi linear expression object)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QuadExpr-Gurobi-quadratic-expression-object"><span class="nav-number">9.</span> <span class="nav-text">QuadExpr(Gurobi quadratic expression object)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GenExpr-Gurobi-general-expression-object"><span class="nav-number">10.</span> <span class="nav-text">GenExpr(Gurobi general expression object)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Callbacks-Gurobi-callback-class"><span class="nav-number">11.</span> <span class="nav-text">Callbacks(Gurobi callback class)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tuplelist-Gurobi-tuple-list"><span class="nav-number">12.</span> <span class="nav-text">tuplelist(Gurobi tuple list)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tupledict-Gurobi-tuple-dict"><span class="nav-number">13.</span> <span class="nav-text">tupledict(Gurobi tuple dict)</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">有何不可</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+</style>
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
