@@ -106,7 +106,7 @@
 <meta property="og:site_name" content="有何不可">
 <meta property="og:description" content="&amp;emsp;&amp;emsp; 使用Gurobi optimizer求解线性规划(LP)问题…">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-04-04T11:04:37.152Z">
+<meta property="og:updated_time" content="2019-04-04T11:12:56.359Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linear Program (LP)">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp; 使用Gurobi optimizer求解线性规划(LP)问题…">
@@ -385,7 +385,7 @@
                 
               
 
-              <time title="创建时间：2019-04-04 18:52:30 / 修改时间：19:04:37" itemprop="dateCreated datePublished" datetime="2019-04-04T18:52:30+08:00">2019-04-04</time>
+              <time title="创建时间：2019-04-04 18:52:30 / 修改时间：19:12:56" itemprop="dateCreated datePublished" datetime="2019-04-04T18:52:30+08:00">2019-04-04</time>
             
 
             
@@ -443,7 +443,7 @@
 
       
         <p>&emsp;&emsp; 使用Gurobi optimizer求解线性规划(LP)问题…<br><a id="more"></a></p>
-<p>$$ max f(X) = 2x_1 + 3x_2 $$<br>&emsp;&emsp; s.t.<br>$$ x_1 + 2<em>x_2 \leq 8 $$<br>$$ 4</em>x_1 \leq16 $$<br>$$ 4*x_2 \leq 12 $$<br>$$ x_1, x_2 \geq 0 $$</p>
+<p>$$ max f(X) = 2x_1 + 3x_2 $$<br>&emsp;&emsp; s.t.<br>$$ x_1 + 2x_2 \leq 8 $$<br>$$ 4x_1 \leq16 $$<br>$$ 4x_2 \leq 12 $$<br>$$ x_1, x_2 \geq 0 $$</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Import lib</span></span><br><span class="line"><span class="keyword">from</span> gurobipy <span class="keyword">import</span> *</span><br><span class="line"><span class="comment"># Create model</span></span><br><span class="line">model_1 = Model()</span><br><span class="line"><span class="comment"># Add decision variables to a model</span></span><br><span class="line">x1 = model_1.addVar(lb=<span class="number">0</span>, vtype=GRB.CONTINUOUS, name=<span class="string">"x1"</span>)</span><br><span class="line">x2 = model_1.addVar(lb=<span class="number">0</span>, vtype=GRB.CONTINUOUS, name=<span class="string">"x2"</span>)</span><br><span class="line"><span class="comment"># Set objective function</span></span><br><span class="line">f1 = <span class="number">2</span>*x1 + <span class="number">3</span>*x2</span><br><span class="line">model_1.setObjective(f1, GRB.MAXIMIZE)</span><br><span class="line"><span class="comment"># Add constraints to a model</span></span><br><span class="line">ct1 = model_1.addConstr(lhs=x1+<span class="number">2</span>*x2, sense=GRB.LESS_EQUAL, rhs=<span class="number">8</span>, name=<span class="string">'ct1'</span>)</span><br><span class="line">ct2 = model_1.addConstr(lhs=<span class="number">4</span>*x1, sense=GRB.LESS_EQUAL, rhs=<span class="number">16</span>, name=<span class="string">"ct2"</span>)</span><br><span class="line">ct2 = model_1.addConstr(lhs=<span class="number">4</span>*x2, sense=GRB.LESS_EQUAL, rhs=<span class="number">12</span>, name=<span class="string">"ct3"</span>)</span><br><span class="line"><span class="comment"># Optimize</span></span><br><span class="line">model_1.optimize()</span><br><span class="line"><span class="comment"># Print data</span></span><br><span class="line"><span class="keyword">if</span> model_1.status == GRB.Status.OPTIMAL:</span><br><span class="line">    print(<span class="string">'='</span>*<span class="number">25</span>)</span><br><span class="line">    <span class="comment"># Print objVal</span></span><br><span class="line">    print(<span class="string">'==&gt; objVal:'</span> ,model_1.objVal)</span><br><span class="line">    <span class="comment"># Print var value</span></span><br><span class="line">    print(<span class="string">'==&gt; x1:'</span>, x1, <span class="string">'x2:'</span>, x2)</span><br></pre></td></tr></table></figure>
 <pre><code>Academic license - for non-commercial use only
 Optimize a model with 3 rows, 2 columns and 4 nonzeros
