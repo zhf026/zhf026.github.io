@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="&amp;emsp;&amp;emsp; 使用Gurobi optimizer求解线性规划(LP)问题…">
+<meta name="keywords" content="Gurobi,Lp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linear Program (LP)">
+<meta property="og:url" content="http://yoursite.com/2019/04/04/Gurobi-LP/index.html">
+<meta property="og:site_name" content="有何不可">
+<meta property="og:description" content="&amp;emsp;&amp;emsp; 使用Gurobi optimizer求解线性规划(LP)问题…">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-04-04T10:55:33.555Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linear Program (LP)">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp; 使用Gurobi optimizer求解线性规划(LP)问题…">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/04/Gurobi-LP/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Linear Program (LP) | 有何不可</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">有何不可</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/04/Gurobi-LP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="有何不可">
+      <meta itemprop="description" content="一个记录学习的博客~ ^.^">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="有何不可">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linear Program (LP)
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-04 18:52:30 / 修改时间：18:55:33" itemprop="dateCreated datePublished" datetime="2019-04-04T18:52:30+08:00">2019-04-04</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Gurobi/" itemprop="url" rel="index"><span itemprop="name">Gurobi</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&emsp;&emsp; 使用Gurobi optimizer求解线性规划(LP)问题…<br><a id="more"></a></p>
+<p>$$ max f(X) = 2x_1 + 3x_2 $$<br>&emsp;&emsp; s.t.<br>$$ x_1 + 2<em>x_2 \leq 8 $$<br>$$ 4</em>x_1 \leq16 $$<br>$$ 4*x_2 \leq 12 $$<br>$$ x_1, x_2 \geq 0 $$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Import lib</span></span><br><span class="line"><span class="keyword">from</span> gurobipy <span class="keyword">import</span> *</span><br><span class="line"><span class="comment"># Create model</span></span><br><span class="line">model_1 = Model()</span><br><span class="line"><span class="comment"># Add decision variables to a model</span></span><br><span class="line">x1 = model_1.addVar(lb=<span class="number">0</span>, vtype=GRB.CONTINUOUS, name=<span class="string">"x1"</span>)</span><br><span class="line">x2 = model_1.addVar(lb=<span class="number">0</span>, vtype=GRB.CONTINUOUS, name=<span class="string">"x2"</span>)</span><br><span class="line"><span class="comment"># Set objective function</span></span><br><span class="line">f1 = <span class="number">2</span>*x1 + <span class="number">3</span>*x2</span><br><span class="line">model_1.setObjective(f1, GRB.MAXIMIZE)</span><br><span class="line"><span class="comment"># Add constraints to a model</span></span><br><span class="line">ct1 = model_1.addConstr(lhs=x1+<span class="number">2</span>*x2, sense=GRB.LESS_EQUAL, rhs=<span class="number">8</span>, name=<span class="string">'ct1'</span>)</span><br><span class="line">ct2 = model_1.addConstr(lhs=<span class="number">4</span>*x1, sense=GRB.LESS_EQUAL, rhs=<span class="number">16</span>, name=<span class="string">"ct2"</span>)</span><br><span class="line">ct2 = model_1.addConstr(lhs=<span class="number">4</span>*x2, sense=GRB.LESS_EQUAL, rhs=<span class="number">12</span>, name=<span class="string">"ct3"</span>)</span><br><span class="line"><span class="comment"># Optimize</span></span><br><span class="line">model_1.optimize()</span><br><span class="line"><span class="comment"># Print data</span></span><br><span class="line"><span class="keyword">if</span> model_1.status == GRB.Status.OPTIMAL:</span><br><span class="line">    print(<span class="string">'='</span>*<span class="number">25</span>)</span><br><span class="line">    <span class="comment"># Print objVal</span></span><br><span class="line">    print(<span class="string">'==&gt; objVal:'</span> ,model_1.objVal)</span><br><span class="line">    <span class="comment"># Print var value</span></span><br><span class="line">    print(<span class="string">'==&gt; x1:'</span>, x1, <span class="string">'x2:'</span>, x2)</span><br></pre></td></tr></table></figure>
+<pre><code>Academic license - for non-commercial use only
+Optimize a model with 3 rows, 2 columns and 4 nonzeros
+Coefficient statistics:
+  Matrix range     [1e+00, 4e+00]
+  Objective range  [2e+00, 3e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [8e+00, 2e+01]
+Presolve removed 2 rows and 0 columns
+Presolve time: 0.01s
+Presolved: 1 rows, 2 columns, 2 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    1.6000000e+01   2.000000e+00   0.000000e+00      0s
+       1    1.4000000e+01   0.000000e+00   0.000000e+00      0s
+
+Solved in 1 iterations and 0.02 seconds
+Optimal objective  1.400000000e+01
+=========================
+==&gt; objVal: 14.0
+==&gt; x1: &lt;gurobi.Var x1 (value 4.0)&gt; x2: &lt;gurobi.Var x2 (value 2.0)&gt;
+</code></pre><p>$$ minf(X) = -3x_1 + x_2 + x_3 $$<br>&emsp;&emsp; s.t.<br>$$ x_1 - 2x_2 + x_3 \leq 11 $$<br>$$ -4x_1 + x_2 + 2x_3 \geq 3 $$<br>$$ -2x_1 + x_3 = 1 $$<br>$$ x_1, x_2, x_3 \geq 0 $$</p>
+<p>&emsp;&emsp; Note:</p>
+<ul>
+<li>Add decision variables to a model in a loop.</li>
+<li>Build a linear expression by using <code>quicksum()</code> function.</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Create model</span></span><br><span class="line">model_2 = Model()</span><br><span class="line"><span class="comment"># Add decision variables to a model in a loop</span></span><br><span class="line">x_names = [<span class="string">'x1'</span>, <span class="string">'x2'</span>, <span class="string">'x3'</span>]</span><br><span class="line">x = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> x_name <span class="keyword">in</span> x_names:</span><br><span class="line">    x[x_name] = model_2.addVar(name=x_name)</span><br><span class="line"><span class="comment"># Set objective function</span></span><br><span class="line">f2 = <span class="number">-3</span>*x[<span class="string">'x1'</span>] + x[<span class="string">'x2'</span>] + x[<span class="string">'x3'</span>]</span><br><span class="line">model_2.setObjective(f2, GRB.MINIMIZE)</span><br><span class="line"><span class="comment"># Add constraints to a model</span></span><br><span class="line">model_2.addConstr(lhs=x[<span class="string">'x1'</span>]<span class="number">-2</span>*x[<span class="string">'x2'</span>]+x[<span class="string">'x3'</span>], sense=GRB.LESS_EQUAL, rhs=<span class="number">11</span>)</span><br><span class="line">model_2.addConstr(lhs=<span class="number">-4</span>*x[<span class="string">'x1'</span>]+x[<span class="string">'x2'</span>]+<span class="number">2</span>*x[<span class="string">'x3'</span>], sense=GRB.GREATER_EQUAL, rhs=<span class="number">3</span>)</span><br><span class="line">model_2.addConstr(lhs=<span class="number">-2</span>*x[<span class="string">'x1'</span>]+x[<span class="string">'x3'</span>], sense=GRB.EQUAL, rhs=<span class="number">1</span>)</span><br><span class="line"><span class="comment"># Optimize</span></span><br><span class="line">model_2.optimize()</span><br><span class="line"><span class="comment"># Print data</span></span><br><span class="line"><span class="keyword">if</span> model_2.status == GRB.Status.OPTIMAL:</span><br><span class="line">    print(<span class="string">'='</span>*<span class="number">25</span>)</span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    print(<span class="string">'==&gt; Objective function:'</span>, f2)</span><br><span class="line">    <span class="comment"># Print ObjVal</span></span><br><span class="line">    print(<span class="string">'==&gt; ObjVal:'</span>, model_2.ObjVal)</span><br><span class="line">    <span class="comment"># Pirnt variable value</span></span><br><span class="line">    print(<span class="string">'==&gt; x1:'</span>,x[<span class="string">'x1'</span>], <span class="string">'x2:'</span>,x[<span class="string">'x2'</span>], <span class="string">'x3:'</span>,x[<span class="string">'x3'</span>])</span><br></pre></td></tr></table></figure>
+<pre><code>Optimize a model with 3 rows, 3 columns and 8 nonzeros
+Coefficient statistics:
+  Matrix range     [1e+00, 4e+00]
+  Objective range  [1e+00, 3e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [1e+00, 1e+01]
+Presolve removed 3 rows and 3 columns
+Presolve time: 0.01s
+Presolve: All rows and columns removed
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0   -2.0000000e+00   0.000000e+00   0.000000e+00      0s
+
+Solved in 0 iterations and 0.01 seconds
+Optimal objective -2.000000000e+00
+=========================
+==&gt; Objective function: &lt;gurobi.LinExpr: -3.0 x1 + x2 + x3&gt;
+==&gt; ObjVal: -2.0
+==&gt; x1: &lt;gurobi.Var x1 (value 4.0)&gt; x2: &lt;gurobi.Var x2 (value 1.0)&gt; x3: &lt;gurobi.Var x3 (value 9.0)&gt;
+</code></pre><p>$$ minf(X) = 2x_1 + 3x_2 + 5x_3 + 2x_4 + 3x_5 $$<br>&emsp;&emsp; s.t.<br>$$ x_1 + x_2 + 2x_3 + x_4 + 3x_5 \geq 4 $$<br>$$ 2x_1 - x_2 + 3x_3 + x_4 + x_5 \geq 3 $$<br>$$ x_1, x_2, x_3, x_4, x_5 \geq 0 $$</p>
+<p>&emsp;&emsp; Note:</p>
+<ul>
+<li>Add decision variables to a model by using <code>Model.addVars()</code> function.</li>
+<li>Build a linear expression by using <code>quicksum()</code> function.</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Creatw model</span></span><br><span class="line">model_3 = Model(name=<span class="string">'model_3'</span>)</span><br><span class="line"><span class="comment"># Add decision variables to a model by using Model.addVars()</span></span><br><span class="line">x_vector = [(<span class="string">'x1'</span>), (<span class="string">'x2'</span>), (<span class="string">'x3'</span>), (<span class="string">'x4'</span>), (<span class="string">'x5'</span>)]</span><br><span class="line">x = model_3.addVars(x_vector, name=x_vector)</span><br><span class="line"><span class="comment"># Set objective function</span></span><br><span class="line">f3 = quicksum([ <span class="number">2</span>*x[<span class="string">'x1'</span>], <span class="number">3</span>*x[<span class="string">'x2'</span>], <span class="number">5</span>*x[<span class="string">'x3'</span>], <span class="number">2</span>*x[<span class="string">'x4'</span>], <span class="number">3</span>*x[<span class="string">'x5'</span>] ])</span><br><span class="line">model_3.setObjective(f3)</span><br><span class="line"><span class="comment"># Add constraints to a model</span></span><br><span class="line">model_3.addConstr(lhs=quicksum([ <span class="number">1</span>*x[<span class="string">'x1'</span>], <span class="number">1</span>*x[<span class="string">'x2'</span>], <span class="number">2</span>*x[<span class="string">'x3'</span>], <span class="number">1</span>*x[<span class="string">'x4'</span>], <span class="number">3</span>*x[<span class="string">'x5'</span>] ]) , sense=GRB.GREATER_EQUAL, rhs=<span class="number">4</span>)</span><br><span class="line">model_3.addConstr(lhs=quicksum([ <span class="number">2</span>*x[<span class="string">'x1'</span>], <span class="number">-1</span>*x[<span class="string">'x2'</span>], <span class="number">3</span>*x[<span class="string">'x3'</span>], <span class="number">1</span>*x[<span class="string">'x4'</span>], <span class="number">1</span>*x[<span class="string">'x5'</span>] ]) , sense=GRB.GREATER_EQUAL, rhs=<span class="number">3</span>)</span><br><span class="line"><span class="comment"># OPtimize</span></span><br><span class="line">model_3.optimize()</span><br><span class="line"><span class="comment"># Print data</span></span><br><span class="line"><span class="keyword">if</span> model_3.status == GRB.Status.OPTIMAL:</span><br><span class="line">    print(<span class="string">'='</span>*<span class="number">25</span>)</span><br><span class="line">    <span class="comment"># </span></span><br><span class="line">    print(<span class="string">'==&gt; Objective function:'</span>, model_3.getObjective())</span><br><span class="line">    <span class="comment"># ObjVal</span></span><br><span class="line">    print(<span class="string">'==&gt; ObjVal:'</span>, model_3.ObjVal) </span><br><span class="line">    <span class="comment"># Print optimal variable value</span></span><br><span class="line">    <span class="keyword">for</span> v <span class="keyword">in</span> model_3.getVars():</span><br><span class="line">        print(<span class="string">'==&gt; '</span> , (v.varName, v.x) )</span><br></pre></td></tr></table></figure>
+<pre><code>Optimize a model with 2 rows, 5 columns and 10 nonzeros
+Coefficient statistics:
+  Matrix range     [1e+00, 3e+00]
+  Objective range  [2e+00, 5e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [3e+00, 4e+00]
+Presolve removed 0 rows and 1 columns
+Presolve time: 0.01s
+Presolved: 2 rows, 4 columns, 8 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   1.750000e+00   0.000000e+00      0s
+       2    5.0000000e+00   0.000000e+00   0.000000e+00      0s
+
+Solved in 2 iterations and 0.01 seconds
+Optimal objective  5.000000000e+00
+=========================
+==&gt; Objective function: &lt;gurobi.LinExpr: 2.0 x1 + 3.0 x2 + 5.0 x3 + 2.0 x4 + 3.0 x5&gt;
+==&gt; ObjVal: 5.0
+==&gt;  (&apos;x1&apos;, 1.0)
+==&gt;  (&apos;x2&apos;, 0.0)
+==&gt;  (&apos;x3&apos;, 0.0)
+==&gt;  (&apos;x4&apos;, 0.0)
+==&gt;  (&apos;x5&apos;, 1.0)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>书山有路勤为径，学海无涯苦作舟~</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById(&quot;QR&quot;); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="有何不可 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="有何不可 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Gurobi/" rel="tag"># Gurobi</a>
+          
+            <a href="/tags/Lp/" rel="tag"># Lp</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/02/Gurobi-Notes/" rel="next" title="Gurobi note （一）">
+                <i class="fa fa-chevron-left"></i> Gurobi note （一）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="有何不可">
+            
+              <p class="site-author-name" itemprop="name">有何不可</p>
+              <div class="site-description motion-element" itemprop="description">一个记录学习的博客~ ^.^</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/zhf026" title="GitHub &rarr; https://github.com/zhf026" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="mailto:zhf026@gmail.com" title="E-Mail &rarr; mailto:zhf026@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="https://blog.csdn.net/weixin_39124421" title="CSDN &rarr; https://blog.csdn.net/weixin_39124421" rel="noopener" target="_blank"><i class="fa fa-fw fa-cuttlefish"></i></a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">有何不可</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
