@@ -98,25 +98,25 @@
 
 
 
-  <meta name="description" content="&amp;emsp;&amp;emsp; 使用Gurobi optimizer求解线性规划(LP)问题…">
-<meta name="keywords" content="Gurobi,LP">
+  <meta name="description" content="&amp;emsp;&amp;emsp; 使用Gurobi optimizer求解二次规划(QP)问题…">
+<meta name="keywords" content="Gurobi,QP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linear Program (LP)">
-<meta property="og:url" content="http://yoursite.com/2019/04/04/Gurobi-LP/index.html">
+<meta property="og:title" content="Quadratic Program (QP)">
+<meta property="og:url" content="http://yoursite.com/2019/04/06/Gurobi/Gurobi-QP/index.html">
 <meta property="og:site_name" content="有何不可">
-<meta property="og:description" content="&amp;emsp;&amp;emsp; 使用Gurobi optimizer求解线性规划(LP)问题…">
+<meta property="og:description" content="&amp;emsp;&amp;emsp; 使用Gurobi optimizer求解二次规划(QP)问题…">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-04-04T11:12:56.359Z">
+<meta property="og:updated_time" content="2019-04-06T03:47:43.385Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linear Program (LP)">
-<meta name="twitter:description" content="&amp;emsp;&amp;emsp; 使用Gurobi optimizer求解线性规划(LP)问题…">
+<meta name="twitter:title" content="Quadratic Program (QP)">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp; 使用Gurobi optimizer求解二次规划(QP)问题…">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/04/04/Gurobi-LP/">
+  <link rel="canonical" href="http://yoursite.com/2019/04/06/Gurobi/Gurobi-QP/">
 
 
 
@@ -126,7 +126,7 @@
   };
 </script>
 
-  <title>Linear Program (LP) | 有何不可</title>
+  <title>Quadratic Program (QP) | 有何不可</title>
   
 
 
@@ -342,7 +342,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/04/Gurobi-LP/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/06/Gurobi/Gurobi-QP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="有何不可">
@@ -359,7 +359,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Linear Program (LP)
+          <h1 class="post-title" itemprop="name headline">Quadratic Program (QP)
 
               
             
@@ -385,7 +385,7 @@
                 
               
 
-              <time title="创建时间：2019-04-04 18:52:30 / 修改时间：19:12:56" itemprop="dateCreated datePublished" datetime="2019-04-04T18:52:30+08:00">2019-04-04</time>
+              <time title="创建时间：2019-04-06 11:36:40 / 修改时间：11:47:43" itemprop="dateCreated datePublished" datetime="2019-04-06T11:36:40+08:00">2019-04-06</time>
             
 
             
@@ -442,85 +442,70 @@
       
 
       
-        <p>&emsp;&emsp; 使用Gurobi optimizer求解线性规划(LP)问题…<br><a id="more"></a></p>
-<p>$$ max f(X) = 2x_1 + 3x_2 $$<br>&emsp;&emsp; s.t.<br>$$ x_1 + 2x_2 \leq 8 $$<br>$$ 4x_1 \leq16 $$<br>$$ 4x_2 \leq 12 $$<br>$$ x_1, x_2 \geq 0 $$</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Import lib</span></span><br><span class="line"><span class="keyword">from</span> gurobipy <span class="keyword">import</span> *</span><br><span class="line"><span class="comment"># Create model</span></span><br><span class="line">model_1 = Model()</span><br><span class="line"><span class="comment"># Add decision variables to a model</span></span><br><span class="line">x1 = model_1.addVar(lb=<span class="number">0</span>, vtype=GRB.CONTINUOUS, name=<span class="string">"x1"</span>)</span><br><span class="line">x2 = model_1.addVar(lb=<span class="number">0</span>, vtype=GRB.CONTINUOUS, name=<span class="string">"x2"</span>)</span><br><span class="line"><span class="comment"># Set objective function</span></span><br><span class="line">f1 = <span class="number">2</span>*x1 + <span class="number">3</span>*x2</span><br><span class="line">model_1.setObjective(f1, GRB.MAXIMIZE)</span><br><span class="line"><span class="comment"># Add constraints to a model</span></span><br><span class="line">ct1 = model_1.addConstr(lhs=x1+<span class="number">2</span>*x2, sense=GRB.LESS_EQUAL, rhs=<span class="number">8</span>, name=<span class="string">'ct1'</span>)</span><br><span class="line">ct2 = model_1.addConstr(lhs=<span class="number">4</span>*x1, sense=GRB.LESS_EQUAL, rhs=<span class="number">16</span>, name=<span class="string">"ct2"</span>)</span><br><span class="line">ct2 = model_1.addConstr(lhs=<span class="number">4</span>*x2, sense=GRB.LESS_EQUAL, rhs=<span class="number">12</span>, name=<span class="string">"ct3"</span>)</span><br><span class="line"><span class="comment"># Optimize</span></span><br><span class="line">model_1.optimize()</span><br><span class="line"><span class="comment"># Print data</span></span><br><span class="line"><span class="keyword">if</span> model_1.status == GRB.Status.OPTIMAL:</span><br><span class="line">    print(<span class="string">'='</span>*<span class="number">25</span>)</span><br><span class="line">    <span class="comment"># Print objVal</span></span><br><span class="line">    print(<span class="string">'==&gt; objVal:'</span> ,model_1.objVal)</span><br><span class="line">    <span class="comment"># Print var value</span></span><br><span class="line">    print(<span class="string">'==&gt; x1:'</span>, x1, <span class="string">'x2:'</span>, x2)</span><br></pre></td></tr></table></figure>
+        <p>&emsp;&emsp; 使用Gurobi optimizer求解二次规划(QP)问题…<br><a id="more"></a></p>
+<p>$$ minimize:x + y + x^2 + xy + y^2 + yz + z^2 $$<br>&emsp;&emsp; s.t.<br>$$ x + 2y + 3z \geq 4 $$<br>$$ x + y \geq 1 $$<br>$$ x, y, z \geq 0 $$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> gurobipy <span class="keyword">import</span> *</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">VAR_NUM = <span class="number">3</span>  <span class="comment"># 变量数目</span></span><br><span class="line">A = np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],[<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>]])              <span class="comment"># 约束系数</span></span><br><span class="line">b = np.array([<span class="number">4</span>, <span class="number">1</span>])                             <span class="comment"># 资源系数</span></span><br><span class="line">c = np.array([<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>])                          <span class="comment"># 目标函数系数</span></span><br><span class="line">Q = np.array([[<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>], [<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>]])  <span class="comment">#</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lb = [<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>]   <span class="comment"># 变量取值下限</span></span><br><span class="line">ub = [GRB.INFINITY, GRB.INFINITY, GRB.INFINITY]           <span class="comment"># 变量取值上限</span></span><br><span class="line">vtype = [GRB.CONTINUOUS, GRB.CONTINUOUS, GRB.CONTINUOUS]  <span class="comment"># 变量类型</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sense = [GRB.GREATER_EQUAL, GRB.GREATER_EQUAL]  <span class="comment"># 约束条件类型</span></span><br></pre></td></tr></table></figure>
+<p>实例化模型</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model = Model()</span><br></pre></td></tr></table></figure>
 <pre><code>Academic license - for non-commercial use only
-Optimize a model with 3 rows, 2 columns and 4 nonzeros
-Coefficient statistics:
-  Matrix range     [1e+00, 4e+00]
-  Objective range  [2e+00, 3e+00]
-  Bounds range     [0e+00, 0e+00]
-  RHS range        [8e+00, 2e+01]
-Presolve removed 2 rows and 0 columns
-Presolve time: 0.01s
-Presolved: 1 rows, 2 columns, 2 nonzeros
-
-Iteration    Objective       Primal Inf.    Dual Inf.      Time
-       0    1.6000000e+01   2.000000e+00   0.000000e+00      0s
-       1    1.4000000e+01   0.000000e+00   0.000000e+00      0s
-
-Solved in 1 iterations and 0.02 seconds
-Optimal objective  1.400000000e+01
-=========================
-==&gt; objVal: 14.0
-==&gt; x1: &lt;gurobi.Var x1 (value 4.0)&gt; x2: &lt;gurobi.Var x2 (value 2.0)&gt;
-</code></pre><p>$$ minf(X) = -3x_1 + x_2 + x_3 $$<br>&emsp;&emsp; s.t.<br>$$ x_1 - 2x_2 + x_3 \leq 11 $$<br>$$ -4x_1 + x_2 + 2x_3 \geq 3 $$<br>$$ -2x_1 + x_3 = 1 $$<br>$$ x_1, x_2, x_3 \geq 0 $$</p>
-<p>&emsp;&emsp; Note:</p>
-<ul>
-<li>Add decision variables to a model in a loop.</li>
-<li>Build a linear expression by using <code>quicksum()</code> function.</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Create model</span></span><br><span class="line">model_2 = Model()</span><br><span class="line"><span class="comment"># Add decision variables to a model in a loop</span></span><br><span class="line">x_names = [<span class="string">'x1'</span>, <span class="string">'x2'</span>, <span class="string">'x3'</span>]</span><br><span class="line">x = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> x_name <span class="keyword">in</span> x_names:</span><br><span class="line">    x[x_name] = model_2.addVar(name=x_name)</span><br><span class="line"><span class="comment"># Set objective function</span></span><br><span class="line">f2 = <span class="number">-3</span>*x[<span class="string">'x1'</span>] + x[<span class="string">'x2'</span>] + x[<span class="string">'x3'</span>]</span><br><span class="line">model_2.setObjective(f2, GRB.MINIMIZE)</span><br><span class="line"><span class="comment"># Add constraints to a model</span></span><br><span class="line">model_2.addConstr(lhs=x[<span class="string">'x1'</span>]<span class="number">-2</span>*x[<span class="string">'x2'</span>]+x[<span class="string">'x3'</span>], sense=GRB.LESS_EQUAL, rhs=<span class="number">11</span>)</span><br><span class="line">model_2.addConstr(lhs=<span class="number">-4</span>*x[<span class="string">'x1'</span>]+x[<span class="string">'x2'</span>]+<span class="number">2</span>*x[<span class="string">'x3'</span>], sense=GRB.GREATER_EQUAL, rhs=<span class="number">3</span>)</span><br><span class="line">model_2.addConstr(lhs=<span class="number">-2</span>*x[<span class="string">'x1'</span>]+x[<span class="string">'x3'</span>], sense=GRB.EQUAL, rhs=<span class="number">1</span>)</span><br><span class="line"><span class="comment"># Optimize</span></span><br><span class="line">model_2.optimize()</span><br><span class="line"><span class="comment"># Print data</span></span><br><span class="line"><span class="keyword">if</span> model_2.status == GRB.Status.OPTIMAL:</span><br><span class="line">    print(<span class="string">'='</span>*<span class="number">25</span>)</span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    print(<span class="string">'==&gt; Objective function:'</span>, f2)</span><br><span class="line">    <span class="comment"># Print ObjVal</span></span><br><span class="line">    print(<span class="string">'==&gt; ObjVal:'</span>, model_2.ObjVal)</span><br><span class="line">    <span class="comment"># Pirnt variable value</span></span><br><span class="line">    print(<span class="string">'==&gt; x1:'</span>,x[<span class="string">'x1'</span>], <span class="string">'x2:'</span>,x[<span class="string">'x2'</span>], <span class="string">'x3:'</span>,x[<span class="string">'x3'</span>])</span><br></pre></td></tr></table></figure>
-<pre><code>Optimize a model with 3 rows, 3 columns and 8 nonzeros
-Coefficient statistics:
-  Matrix range     [1e+00, 4e+00]
-  Objective range  [1e+00, 3e+00]
-  Bounds range     [0e+00, 0e+00]
-  RHS range        [1e+00, 1e+01]
-Presolve removed 3 rows and 3 columns
-Presolve time: 0.01s
-Presolve: All rows and columns removed
-Iteration    Objective       Primal Inf.    Dual Inf.      Time
-       0   -2.0000000e+00   0.000000e+00   0.000000e+00      0s
-
-Solved in 0 iterations and 0.01 seconds
-Optimal objective -2.000000000e+00
-=========================
-==&gt; Objective function: &lt;gurobi.LinExpr: -3.0 x1 + x2 + x3&gt;
-==&gt; ObjVal: -2.0
-==&gt; x1: &lt;gurobi.Var x1 (value 4.0)&gt; x2: &lt;gurobi.Var x2 (value 1.0)&gt; x3: &lt;gurobi.Var x3 (value 9.0)&gt;
-</code></pre><p>$$ minf(X) = 2x_1 + 3x_2 + 5x_3 + 2x_4 + 3x_5 $$<br>&emsp;&emsp; s.t.<br>$$ x_1 + x_2 + 2x_3 + x_4 + 3x_5 \geq 4 $$<br>$$ 2x_1 - x_2 + 3x_3 + x_4 + x_5 \geq 3 $$<br>$$ x_1, x_2, x_3, x_4, x_5 \geq 0 $$</p>
-<p>&emsp;&emsp; Note:</p>
-<ul>
-<li>Add decision variables to a model by using <code>Model.addVars()</code> function.</li>
-<li>Build a linear expression by using <code>quicksum()</code> function.</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Creatw model</span></span><br><span class="line">model_3 = Model(name=<span class="string">'model_3'</span>)</span><br><span class="line"><span class="comment"># Add decision variables to a model by using Model.addVars()</span></span><br><span class="line">x_vector = [(<span class="string">'x1'</span>), (<span class="string">'x2'</span>), (<span class="string">'x3'</span>), (<span class="string">'x4'</span>), (<span class="string">'x5'</span>)]</span><br><span class="line">x = model_3.addVars(x_vector, name=x_vector)</span><br><span class="line"><span class="comment"># Set objective function</span></span><br><span class="line">f3 = quicksum([ <span class="number">2</span>*x[<span class="string">'x1'</span>], <span class="number">3</span>*x[<span class="string">'x2'</span>], <span class="number">5</span>*x[<span class="string">'x3'</span>], <span class="number">2</span>*x[<span class="string">'x4'</span>], <span class="number">3</span>*x[<span class="string">'x5'</span>] ])</span><br><span class="line">model_3.setObjective(f3)</span><br><span class="line"><span class="comment"># Add constraints to a model</span></span><br><span class="line">model_3.addConstr(lhs=quicksum([ <span class="number">1</span>*x[<span class="string">'x1'</span>], <span class="number">1</span>*x[<span class="string">'x2'</span>], <span class="number">2</span>*x[<span class="string">'x3'</span>], <span class="number">1</span>*x[<span class="string">'x4'</span>], <span class="number">3</span>*x[<span class="string">'x5'</span>] ]) , sense=GRB.GREATER_EQUAL, rhs=<span class="number">4</span>)</span><br><span class="line">model_3.addConstr(lhs=quicksum([ <span class="number">2</span>*x[<span class="string">'x1'</span>], <span class="number">-1</span>*x[<span class="string">'x2'</span>], <span class="number">3</span>*x[<span class="string">'x3'</span>], <span class="number">1</span>*x[<span class="string">'x4'</span>], <span class="number">1</span>*x[<span class="string">'x5'</span>] ]) , sense=GRB.GREATER_EQUAL, rhs=<span class="number">3</span>)</span><br><span class="line"><span class="comment"># OPtimize</span></span><br><span class="line">model_3.optimize()</span><br><span class="line"><span class="comment"># Print data</span></span><br><span class="line"><span class="keyword">if</span> model_3.status == GRB.Status.OPTIMAL:</span><br><span class="line">    print(<span class="string">'='</span>*<span class="number">25</span>)</span><br><span class="line">    <span class="comment"># </span></span><br><span class="line">    print(<span class="string">'==&gt; Objective function:'</span>, model_3.getObjective())</span><br><span class="line">    <span class="comment"># ObjVal</span></span><br><span class="line">    print(<span class="string">'==&gt; ObjVal:'</span>, model_3.ObjVal) </span><br><span class="line">    <span class="comment"># Print optimal variable value</span></span><br><span class="line">    <span class="keyword">for</span> v <span class="keyword">in</span> model_3.getVars():</span><br><span class="line">        print(<span class="string">'==&gt; '</span> , (v.varName, v.x) )</span><br></pre></td></tr></table></figure>
-<pre><code>Optimize a model with 2 rows, 5 columns and 10 nonzeros
+</code></pre><p>创建决策变量</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 方式一：for + addVar()</span></span><br><span class="line">vars = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(VAR_NUM):</span><br><span class="line">    <span class="comment"># 添加变量</span></span><br><span class="line">    x = model.addVar(lb=lb[i], ub=ub[i], vtype=vtype[i])  </span><br><span class="line">    vars.append(x)</span><br></pre></td></tr></table></figure>
+<p>设置目标函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 木匾函数表达式</span></span><br><span class="line">obj_func = QuadExpr()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(Q.shape[<span class="number">0</span>]):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(Q.shape[<span class="number">1</span>]):</span><br><span class="line">        <span class="keyword">if</span> Q[i,j] != <span class="number">0</span>:</span><br><span class="line">            obj_func += Q[i,j]*vars[i]*vars[j]</span><br><span class="line"><span class="keyword">for</span> k <span class="keyword">in</span> range(c.shape[<span class="number">0</span>]):</span><br><span class="line">    <span class="keyword">if</span> c[k] != <span class="number">0</span>:</span><br><span class="line">        obj_func += c[k]*vars[k]</span><br><span class="line"><span class="comment"># 设置目标函数</span></span><br><span class="line">model.setObjective(obj_func)</span><br></pre></td></tr></table></figure>
+<p>加入约束条件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 方式一：for + addConstr()</span></span><br><span class="line">rows,cols = A.shape</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(rows):</span><br><span class="line">    expr = LinExpr()  </span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(cols):</span><br><span class="line">        expr += A[i,j]*vars[j]</span><br><span class="line">    <span class="comment"># 添加约束条件</span></span><br><span class="line">    model.addConstr(expr, sense[i], b[i])</span><br></pre></td></tr></table></figure>
+<p>模型优化</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model.optimize()</span><br></pre></td></tr></table></figure>
+<pre><code>Optimize a model with 2 rows, 3 columns and 5 nonzeros
+Model has 5 quadratic objective terms
 Coefficient statistics:
   Matrix range     [1e+00, 3e+00]
-  Objective range  [2e+00, 5e+00]
+  Objective range  [1e+00, 1e+00]
+  QObjective range [2e+00, 2e+00]
   Bounds range     [0e+00, 0e+00]
-  RHS range        [3e+00, 4e+00]
-Presolve removed 0 rows and 1 columns
-Presolve time: 0.01s
-Presolved: 2 rows, 4 columns, 8 nonzeros
+  RHS range        [1e+00, 4e+00]
+Presolve time: 0.02s
+Presolved: 2 rows, 3 columns, 5 nonzeros
+Presolved model has 5 quadratic objective terms
+Ordering time: 0.00s
 
-Iteration    Objective       Primal Inf.    Dual Inf.      Time
-       0    0.0000000e+00   1.750000e+00   0.000000e+00      0s
-       2    5.0000000e+00   0.000000e+00   0.000000e+00      0s
+Barrier statistics:
+ Free vars  : 2
+ AA&apos; NZ     : 6.000e+00
+ Factor NZ  : 1.000e+01
+ Factor Ops : 3.000e+01 (less than 1 second per iteration)
+ Threads    : 1
 
-Solved in 2 iterations and 0.01 seconds
-Optimal objective  5.000000000e+00
-=========================
-==&gt; Objective function: &lt;gurobi.LinExpr: 2.0 x1 + 3.0 x2 + 5.0 x3 + 2.0 x4 + 3.0 x5&gt;
-==&gt; ObjVal: 5.0
-==&gt;  (&apos;x1&apos;, 1.0)
-==&gt;  (&apos;x2&apos;, 0.0)
-==&gt;  (&apos;x3&apos;, 0.0)
-==&gt;  (&apos;x4&apos;, 0.0)
-==&gt;  (&apos;x5&apos;, 1.0)
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   1.68862705e+05 -1.66862803e+05  1.50e+03 4.63e-07  9.99e+05     0s
+   1   3.32226526e+05 -3.31124005e+05  1.50e-03 4.55e-13  1.33e+05     0s
+   2   4.88052576e+04 -4.83822339e+04  1.50e-09 2.84e-14  1.94e+04     0s
+   3   7.20061857e+03 -7.03783959e+03  2.84e-14 0.00e+00  2.85e+03     0s
+   4   1.07437613e+03 -1.01125049e+03  1.78e-14 1.78e-15  4.17e+02     0s
+   5   1.65062979e+02 -1.40052218e+02  1.07e-14 3.55e-15  6.10e+01     0s
+   6   2.73860883e+01 -1.68291419e+01  8.88e-16 2.66e-15  8.84e+00     0s
+   7   5.67667771e+00 -1.96124352e-01  8.88e-16 2.22e-16  1.17e+00     0s
+   8   2.86519627e+00  2.67284732e+00  1.11e-16 3.33e-16  3.85e-02     0s
+   9   2.85719105e+00  2.85649015e+00  0.00e+00 0.00e+00  1.40e-04     0s
+  10   2.85714291e+00  2.85714220e+00  6.66e-16 0.00e+00  1.40e-07     0s
+  11   2.85714286e+00  2.85714286e+00  1.11e-16 1.46e-16  1.40e-10     0s
+
+Barrier solved model in 11 iterations and 0.07 seconds
+Optimal objective 2.85714286e+00
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = model.getAttr(<span class="string">'x'</span>, vars)</span><br><span class="line">x</span><br></pre></td></tr></table></figure>
+<pre><code>[0.5714285707563889, 0.42857142925598307, 0.8571428569222507]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">R = model.getConstrs()</span><br><span class="line">R</span><br></pre></td></tr></table></figure>
+<pre><code>[&lt;gurobi.Constr R0&gt;, &lt;gurobi.Constr R1&gt;]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">func = model.getObjective()</span><br><span class="line">func</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;gurobi.QuadExpr: C0 + C1 + [ C0 ^ 2 + C0 * C1 + C1 ^ 2 + C1 * C2 + C2 ^ 2 ]&gt;
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model.getVars()</span><br></pre></td></tr></table></figure>
+<pre><code>[&lt;gurobi.Var C0 (value 0.5714285707563889)&gt;,
+ &lt;gurobi.Var C1 (value 0.42857142925598307)&gt;,
+ &lt;gurobi.Var C2 (value 0.8571428569222507)&gt;]
 </code></pre>
       
     </div>
@@ -575,7 +560,7 @@ Optimal objective  5.000000000e+00
           
             <a href="/tags/Gurobi/" rel="tag"># Gurobi</a>
           
-            <a href="/tags/LP/" rel="tag"># LP</a>
+            <a href="/tags/QP/" rel="tag"># QP</a>
           
         </div>
       
@@ -588,8 +573,8 @@ Optimal objective  5.000000000e+00
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/04/02/Gurobi-Notes/" rel="next" title="Gurobi Notes">
-                <i class="fa fa-chevron-left"></i> Gurobi Notes
+              <a href="/2019/04/04/Gurobi/Gurobi-LP/" rel="next" title="Linear Program (LP)">
+                <i class="fa fa-chevron-left"></i> Linear Program (LP)
               </a>
             
           </div>
@@ -658,7 +643,7 @@ Optimal objective  5.000000000e+00
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-count">10</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -732,7 +717,9 @@ Optimal objective  5.000000000e+00
                     
                       
                     
-                    <span class="site-state-item-count">14</span>
+                      
+                    
+                    <span class="site-state-item-count">15</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
