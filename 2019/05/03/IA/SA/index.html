@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.1',
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="&amp;emsp;&amp;emsp; 本文讲述了模拟退火算法，并提供了示例代码（Python版本）…">
+<meta name="keywords" content="Python,Algorithm,SA">
+<meta property="og:type" content="article">
+<meta property="og:title" content="模拟退火算法">
+<meta property="og:url" content="http://yoursite.com/2019/05/03/IA/SA/index.html">
+<meta property="og:site_name" content="有何不可">
+<meta property="og:description" content="&amp;emsp;&amp;emsp; 本文讲述了模拟退火算法，并提供了示例代码（Python版本）…">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-05-03T11:39:34.018Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="模拟退火算法">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp; 本文讲述了模拟退火算法，并提供了示例代码（Python版本）…">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/05/03/IA/SA/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>模拟退火算法 | 有何不可</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">有何不可</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+  
+
+  
+
+  <a href="https://github.com/zhf026" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/03/IA/SA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="有何不可">
+      <meta itemprop="description" content="一个记录学习的博客~ ^.^">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="有何不可">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">模拟退火算法
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-03 19:29:02 / 修改时间：19:39:34" itemprop="dateCreated datePublished" datetime="2019-05-03T19:29:02+08:00">2019-05-03</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Intelligent-algorithm/" itemprop="url" rel="index"><span itemprop="name">Intelligent algorithm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&emsp;&emsp; 本文讲述了模拟退火算法，并提供了示例代码（Python版本）…<br><a id="more"></a></p>
+<h1 id="1-算法由来"><a href="#1-算法由来" class="headerlink" title="1. 算法由来"></a>1. 算法由来</h1><p>&emsp;&emsp; 模拟退火算法的思想最早由Metropolis于1953年提出，Kirkpatrick于1983年第一次使用模拟退火算法求解组合优化问题。该算法的提出用于解决NP复杂性问题，克服优化过程陷入局部最优解及克服对初值的依赖性。</p>
+<h1 id="2-算法思想"><a href="#2-算法思想" class="headerlink" title="2. 算法思想"></a>2. 算法思想</h1><p>&emsp;&emsp; 模拟退火算法以优化问题的求解过程与物理系统退火过程的相似性为基础，利用Metropolis算法并适当地控制温度的下降过程来实现模拟退火，从而达到求解全局最优问题的目的。</p>
+<h2 id="2-1-物理退火"><a href="#2-1-物理退火" class="headerlink" title="2.1 物理退火"></a>2.1 物理退火</h2><p>&emsp;&emsp; 退火是指将固体物质（如金属），加热到足够高的温度，使其分子（原子）呈随机排列状态。然后逐步降温，使之<strong>缓慢地冷却</strong>，以争取足够的时间，让大量的分子（原子）在丧失可动性之前进行重新分布。最后，分子（原子）以低能状态排列，物质的能量达到最低能量状态。简言之，就是将固体加热至足够高的温度，再让其缓慢地冷却，以保证物体达到最低能量状态。<br>&emsp;&emsp; 物理退火过程可分为三部分：<strong>加温过程</strong> 、 <strong>等温过程</strong>和<strong>冷却过程</strong>。</p>
+<ul>
+<li><strong>加温过程</strong>： 增强组成固体物质的粒子的热运动，使其偏离平衡状态。当温度足够高时，固体物质熔化为液体，从而消除系统原先存在的非均匀态；</li>
+<li><strong>等温过程</strong>：对于与周围环境交换热量而温度不变的封闭系统，系统状态的自发变化总是朝着自由能减少的方向进行。当自由能达到最小时，系统达到平衡态；</li>
+<li><strong>冷却过程</strong>：减弱粒子的热运动，粒子的排列逐渐趋于有序，系统能量逐渐下降，从而得到低能量的晶体结构。<h2 id="2-2-模拟退火"><a href="#2-2-模拟退火" class="headerlink" title="2.2 模拟退火"></a>2.2 模拟退火</h2>&emsp;&emsp; 使用物理退火过程模拟组合优化问题时，对应关系如下：<blockquote>
+<p>粒子状态 –&gt; 解<br>能量最低态时粒子状态 –&gt; 最优解<br>能量 –&gt; 目标函数<br>熔解过程 –&gt; 设定初温<br>等温过程 –&gt; Metropolis采样过程<br>冷却过程 –&gt; 控制参数温度T的下降</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="3-Metropolis接受准则-–-以概率接受新状态"><a href="#3-Metropolis接受准则-–-以概率接受新状态" class="headerlink" title="3. Metropolis接受准则 – 以概率接受新状态"></a>3. Metropolis接受准则 – 以概率接受新状态</h1><p>&emsp;&emsp; 若在温度T下，状态i –&gt; 新状态j:</p>
+<blockquote>
+<p> 若 $$ E_j &lt; E_i  $$ 则接受新状态j；</p>
+</blockquote>
+<blockquote>
+<p>若 $$ E_j \geq E_i  $$<br>当 $$ exp(- \frac{E_2-E_1}{T}) &gt; \beta $$<br> beta 为[0,1)之间的随机数， 则接受新状态j，否则，保持原状态i。</p>
+</blockquote>
+<h1 id="4-算法参数"><a href="#4-算法参数" class="headerlink" title="4. 算法参数"></a>4. 算法参数</h1><ul>
+<li><strong>状态产生函数</strong>：用于产生候选解，决定了解的邻域结构。通常由两部分组成：产生候选解的方式和产生候选解的概率分布。</li>
+<li><strong>初温</strong>：初温越高，获得高质量解的几率越大，且Metropolis的接受率约为1，但是计算时间过长。</li>
+<li><strong>退温函数（温度更新函数）</strong>：用于修改温度值。常用的退温函数为指数退温函数，即$ T_t+1 = KT_t$， 其中$ 0&lt;K&lt;1 $ ，接近于1。</li>
+<li><strong>Markov链长度L</strong>：在等温条件下，进行迭代优化的次数，即每个温度下迭代的次数。一般选取100-1000。</li>
+</ul>
+<h1 id="5-算法流程"><a href="#5-算法流程" class="headerlink" title="5. 算法流程"></a>5. 算法流程</h1><ol>
+<li>初始化 – 给定初温和初始解，Markov链长度L。</li>
+<li>产生候选解（新解）– 状态产生函数</li>
+<li>接受或舍弃候选解 – Metropolis接受准则</li>
+<li>在当前温度下是否充分搜索 – 迭代次数是否大于L。</li>
+<li>是否满足停止准则 – 若满足，则结束程序。</li>
+<li>降低温度T, 跳转到2 – 退温函数</li>
+</ol>
+<h1 id="6-代码示例-–-Python"><a href="#6-代码示例-–-Python" class="headerlink" title="6. 代码示例 – Python"></a>6. 代码示例 – Python</h1><blockquote>
+<p><strong>注意</strong>：计算结果主要与状态产生函数有关，与T,K,L关系不大。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Import libs</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> random <span class="keyword">as</span> rd</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Constant variables</span></span><br><span class="line">MIN = [<span class="number">-5</span>, <span class="number">-5</span>]</span><br><span class="line">MAX = [<span class="number">5</span>, <span class="number">5</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># SA</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SA</span><span class="params">()</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,T=<span class="number">100</span>,K=<span class="number">0.99</span>,L=<span class="number">50</span>,dim=<span class="number">2</span>)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        Initiate the parameters of SA.</span></span><br><span class="line"><span class="string">        :param T: Current temperature.</span></span><br><span class="line"><span class="string">        :param K: Attenuation coefficient.</span></span><br><span class="line"><span class="string">        :param L: Markov chain length.</span></span><br><span class="line"><span class="string">        :param dim: Dimension.</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line"></span><br><span class="line">        self.T = T</span><br><span class="line">        self.K = K</span><br><span class="line">        self.L = L</span><br><span class="line">        self.dim = dim</span><br><span class="line"></span><br><span class="line">        self.s = np.array([<span class="number">0.0</span>]*dim)            <span class="comment"># State, namely current solution</span></span><br><span class="line">        self.bs = np.array([<span class="number">0.0</span>]*dim)           <span class="comment"># Best state</span></span><br><span class="line">        self.trace = list()</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">init_val</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        Set the initial solutions.</span></span><br><span class="line"><span class="string">        :return:</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(self.dim):</span><br><span class="line">            self.s[i] = rd.uniform(MIN[i], MAX[i])</span><br><span class="line">        self.bs = self.s</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">energy</span><span class="params">(self, s)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        Energy function, namely objective function.</span></span><br><span class="line"><span class="string">        :param  s: state, namely candidate solution.</span></span><br><span class="line"><span class="string">        :return E:</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Objective function</span></span><br><span class="line">        E = <span class="number">5</span>*np.cos(s[<span class="number">0</span>]*s[<span class="number">1</span>])+s[<span class="number">0</span>]*s[<span class="number">1</span>]+s[<span class="number">1</span>]**<span class="number">3</span></span><br><span class="line">        <span class="keyword">return</span> E</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update_T</span><span class="params">(self, t)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        Update temperature.</span></span><br><span class="line"><span class="string">        :param  t: current temperature.</span></span><br><span class="line"><span class="string">        :return T: the next temperature.</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line"></span><br><span class="line">        T = self.K * t</span><br><span class="line">        <span class="keyword">return</span> T</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">state_generated</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        Generate the candidate solutions.</span></span><br><span class="line"><span class="string">        :return new_s: The candidate solutions.</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line"></span><br><span class="line">        new_s = np.array([<span class="number">0.0</span>]*self.dim)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(self.dim):</span><br><span class="line">            detaS = rd.uniform(<span class="number">0</span>,<span class="number">1</span>) * <span class="number">2</span> - <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> self.s[i]+detaS &lt;= MAX[i] <span class="keyword">and</span> self.s[i]+detaS &gt;= MIN[i]:</span><br><span class="line">                new_s[i] = self.s[i]+detaS</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                new_s[i] = self.s[i]-detaS</span><br><span class="line">        <span class="keyword">return</span> new_s</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">state_accepted</span><span class="params">(self, new_s)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        Based on the Metropolis laws.</span></span><br><span class="line"><span class="string">        :param new_s: The candidate solutions.</span></span><br><span class="line"><span class="string">        :return:</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line"></span><br><span class="line">        accepted_s = np.array([<span class="number">0.0</span>]*self.dim)</span><br><span class="line">        <span class="comment"># Metropolis</span></span><br><span class="line">        <span class="keyword">if</span> self.energy(new_s) &lt; self.energy(self.s):</span><br><span class="line">            accepted_s = new_s</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            delta_E = self.energy(new_s)-self.energy(self.s)</span><br><span class="line">            alpha = np.exp(-delta_E/self.T)</span><br><span class="line">            <span class="keyword">if</span> alpha &gt; np.random.uniform(<span class="number">0</span>,<span class="number">1</span>):</span><br><span class="line">                accepted_s = new_s</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                accepted_s = self.s</span><br><span class="line">        self.s = accepted_s</span><br><span class="line">        <span class="keyword">if</span> self.energy(self.s) &lt; self.energy(self.bs):</span><br><span class="line">            self.bs = self.s</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        Run the SA algorithm.</span></span><br><span class="line"><span class="string">        :return:</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line"></span><br><span class="line">        self.init_val()</span><br><span class="line">        <span class="keyword">while</span> self.T &gt; <span class="number">1e-03</span> :</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(self.L):</span><br><span class="line">                new_s = self.state_generated()</span><br><span class="line">                self.state_accepted(new_s)</span><br><span class="line">                <span class="comment">#</span></span><br><span class="line">                self.trace.append(self.energy(self.bs))</span><br><span class="line">            self.T = self.update_T(self.T)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># main</span></span><br><span class="line">   <span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line"></span><br><span class="line">       sa = SA(dim=<span class="number">2</span>)</span><br><span class="line">       sa.run()</span><br><span class="line">       <span class="comment">#</span></span><br><span class="line">       print(<span class="string">'Optimal solution'</span>, sa.bs)</span><br><span class="line">       print(<span class="string">'Function value'</span>, sa.energy(sa.bs))</span><br><span class="line">       <span class="comment">#</span></span><br><span class="line">       plt.plot(sa.trace)</span><br><span class="line">       title = <span class="string">'SA: '</span> + str(sa.energy(sa.bs))</span><br><span class="line">       plt.title(title)</span><br><span class="line">       plt.show()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center;">
+  <img id="wechat_subscriber_qcode" src="/" alt="有何不可 wechat" style="width: 200px; max-width: 100%;">
+  <div>Subscribe to my blog by scanning my wechat account~</div>
+</div>
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>书山有路勤为径，学海无涯苦作舟~</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById(&quot;QR&quot;); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="有何不可 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="有何不可 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          
+            <a href="/tags/SA/" rel="tag"># SA</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div class="social_share">
+            
+            
+              <div id="needsharebutton-postbottom">
+                <span class="btn">
+                  <i class="fa fa-share-alt" aria-hidden="true"></i>
+                </span>
+              </div>
+            
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/10/python/matplotlib-bar/" rel="next" title="绘制柱状图">
+                <i class="fa fa-chevron-left"></i> 绘制柱状图
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/03/IA/GA/" rel="prev" title="GA">
+                GA <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="有何不可">
+            
+              <p class="site-author-name" itemprop="name">有何不可</p>
+              <div class="site-description motion-element" itemprop="description">一个记录学习的博客~ ^.^</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/zhf026" title="GitHub &rarr; https://github.com/zhf026" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="mailto:zhf026@outlook.com" title="E-Mail &rarr; mailto:zhf026@outlook.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="https://blog.csdn.net/weixin_39124421" title="CSDN &rarr; https://blog.csdn.net/weixin_39124421" rel="noopener" target="_blank"><i class="fa fa-fw fa-cuttlefish"></i></a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-算法由来"><span class="nav-number">1.</span> <span class="nav-text">1. 算法由来</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-算法思想"><span class="nav-number">2.</span> <span class="nav-text">2. 算法思想</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-物理退火"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 物理退火</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-模拟退火"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 模拟退火</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Metropolis接受准则-–-以概率接受新状态"><span class="nav-number">3.</span> <span class="nav-text">3. Metropolis接受准则 – 以概率接受新状态</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-算法参数"><span class="nav-number">4.</span> <span class="nav-text">4. 算法参数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-算法流程"><span class="nav-number">5.</span> <span class="nav-text">5. 算法流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-代码示例-–-Python"><span class="nav-number">6.</span> <span class="nav-text">6. 代码示例 – Python</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">有何不可</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/reading_progress/reading_progress.js"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+</style>
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+  <script>
+    
+      pbOptions = {};
+      
+        pbOptions.iconStyle = "box";
+      
+        pbOptions.boxForm = "horizontal";
+      
+        pbOptions.position = "bottomCenter";
+      
+        pbOptions.networks = "Wechat,QQZone";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+        flOptions.iconStyle = "box";
+      
+        flOptions.boxForm = "horizontal";
+      
+        flOptions.position = "middleRight";
+      
+        flOptions.networks = "Wechat,QQZone";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

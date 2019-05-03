@@ -22,6 +22,10 @@
 <meta name="theme-color" content="#222">
 
 
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
 
 
 
@@ -63,6 +67,10 @@
   <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
 
 
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
 
 
 
@@ -74,7 +82,7 @@
     root: '/',
     scheme: 'Mist',
     version: '7.0.1',
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
     back2top: true,
     back2top_sidebar: false,
     fancybox: false,
@@ -98,30 +106,25 @@
 
 
 
-  <meta name="description" content="&amp;emsp;&amp;emsp; 主要讲解如何使用Matplotlib绘制柱状图…">
-<meta name="keywords" content="Python,Matplotlib-bar">
+  <meta name="description" content="&amp;emsp;&amp;emsp; 讲解如何在Python中安装opencv库（Windows环境）">
+<meta name="keywords" content="python,opencv">
 <meta property="og:type" content="article">
-<meta property="og:title" content="绘制柱状图">
-<meta property="og:url" content="http://yoursite.com/2019/04/10/matplotlib-bar/index.html">
+<meta property="og:title" content="如何在Python中配置opencv">
+<meta property="og:url" content="http://yoursite.com/2019/03/11/python/Opencv-Config/index.html">
 <meta property="og:site_name" content="有何不可">
-<meta property="og:description" content="&amp;emsp;&amp;emsp; 主要讲解如何使用Matplotlib绘制柱状图…">
+<meta property="og:description" content="&amp;emsp;&amp;emsp; 讲解如何在Python中安装opencv库（Windows环境）">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/zhf026/zhf026.github.io/master/file_images/Matplotlib/bar/output_2_0.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/zhf026/zhf026.github.io/master/file_images/Matplotlib/bar/output_4_0.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/zhf026/zhf026.github.io/master/file_images/Matplotlib/bar/output_6_0.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/zhf026/zhf026.github.io/master/file_images/Matplotlib/bar/output_8_0.png">
-<meta property="og:updated_time" content="2019-04-10T13:29:26.841Z">
+<meta property="og:updated_time" content="2019-04-03T12:04:22.696Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="绘制柱状图">
-<meta name="twitter:description" content="&amp;emsp;&amp;emsp; 主要讲解如何使用Matplotlib绘制柱状图…">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/zhf026/zhf026.github.io/master/file_images/Matplotlib/bar/output_2_0.png">
+<meta name="twitter:title" content="如何在Python中配置opencv">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp; 讲解如何在Python中安装opencv库（Windows环境）">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/04/10/matplotlib-bar/">
+  <link rel="canonical" href="http://yoursite.com/2019/03/11/python/Opencv-Config/">
 
 
 
@@ -131,7 +134,7 @@
   };
 </script>
 
-  <title>绘制柱状图 | 有何不可</title>
+  <title>如何在Python中配置opencv | 有何不可</title>
   
 
 
@@ -179,7 +182,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -322,6 +325,15 @@
     </header>
 
     
+  
+  
+  
+  
+
+  
+
+  <a href="https://github.com/zhf026" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
 
 
     <main id="main" class="main">
@@ -341,13 +353,15 @@
   
 
   
+    <div class="reading-progress-bar"></div>
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/10/matplotlib-bar/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/11/python/Opencv-Config/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="有何不可">
@@ -364,7 +378,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">绘制柱状图
+          <h1 class="post-title" itemprop="name headline">如何在Python中配置opencv
 
               
             
@@ -390,12 +404,24 @@
                 
               
 
-              <time title="创建时间：2019-04-10 21:03:15 / 修改时间：21:29:26" itemprop="dateCreated datePublished" datetime="2019-04-10T21:03:15+08:00">2019-04-10</time>
+              <time title="创建时间：2019-03-11 13:09:59" itemprop="dateCreated datePublished" datetime="2019-03-11T13:09:59+08:00">2019-03-11</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-04-03 20:04:22" itemprop="dateModified" datetime="2019-04-03T20:04:22+08:00">2019-04-03</time>
               
             
           </span>
@@ -412,7 +438,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Matplotlib/" itemprop="url" rel="index"><span itemprop="name">Matplotlib</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Opencv/" itemprop="url" rel="index"><span itemprop="name">Opencv</span></a></span>
 
                 
                 
@@ -447,16 +473,12 @@
       
 
       
-        <p>&emsp;&emsp; 主要讲解如何使用Matplotlib绘制柱状图…<br><a id="more"></a></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br></pre></td></tr></table></figure>
-<h1 id="Type-1"><a href="#Type-1" class="headerlink" title="Type 1"></a>Type 1</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">a = (<span class="number">20</span>, <span class="number">30</span>, <span class="number">30</span>, <span class="number">35</span>, <span class="number">27</span>)</span><br><span class="line">b = (<span class="number">25</span>, <span class="number">40</span>, <span class="number">34</span>, <span class="number">20</span>, <span class="number">25</span>)</span><br><span class="line">ind = np.arange(len(a))</span><br><span class="line">width = <span class="number">0.35</span></span><br><span class="line"></span><br><span class="line">p1 = plt.bar(ind, a, width)</span><br><span class="line">p2 = plt.bar(ind,b, width, bottom=a)</span><br><span class="line"></span><br><span class="line">label = [str(i) <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">4</span>)]</span><br><span class="line">label.append(<span class="string">'0'</span>)</span><br><span class="line">plt.xticks([i <span class="keyword">for</span> i <span class="keyword">in</span> range(len(a))], label)</span><br><span class="line">plt.legend((p1[<span class="number">0</span>], p2[<span class="number">0</span>]), (<span class="string">'a'</span>, <span class="string">'b'</span>))</span><br><span class="line">plt.title(<span class="string">'Type 1'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<p><img src="https://raw.githubusercontent.com/zhf026/zhf026.github.io/master/file_images/Matplotlib/bar/output_2_0.png" alt="png"></p>
-<h1 id="Type-2"><a href="#Type-2" class="headerlink" title="Type 2"></a>Type 2</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">x1 = (<span class="number">20</span>, <span class="number">30</span>, <span class="number">30</span>, <span class="number">35</span>, <span class="number">27</span>)</span><br><span class="line">x2 = (<span class="number">25</span>, <span class="number">40</span>, <span class="number">34</span>, <span class="number">20</span>, <span class="number">25</span>)</span><br><span class="line">x3 = [<span class="number">40</span>, <span class="number">25</span>, <span class="number">35</span>, <span class="number">40</span>, <span class="number">30</span>]</span><br><span class="line"></span><br><span class="line">ind = np.arange(len(x1))</span><br><span class="line">width = <span class="number">0.35</span></span><br><span class="line"></span><br><span class="line">p1 = plt.bar(ind, x1, width)</span><br><span class="line">p2 = plt.bar(ind, x2, width, bottom=x1)</span><br><span class="line">temp_x1_x2 = [x1[i]+x2[i] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(x1))]</span><br><span class="line">p3 = plt.bar(ind, x3, width, bottom=temp_x1_x2)</span><br><span class="line"></span><br><span class="line">plt.legend((p1[<span class="number">0</span>],p2[<span class="number">0</span>],p3[<span class="number">0</span>]),(<span class="string">'x1'</span>,<span class="string">'x2'</span>,<span class="string">'x3'</span>))</span><br><span class="line">plt.title(<span class="string">'Type 2'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<p><img src="https://raw.githubusercontent.com/zhf026/zhf026.github.io/master/file_images/Matplotlib/bar/output_4_0.png" alt="png"></p>
-<h1 id="Type-3"><a href="#Type-3" class="headerlink" title="Type 3"></a>Type 3</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">c = (<span class="number">20</span>, <span class="number">30</span>, <span class="number">30</span>, <span class="number">35</span>, <span class="number">27</span>)</span><br><span class="line">d = (<span class="number">25</span>, <span class="number">-40</span>, <span class="number">34</span>, <span class="number">-20</span>, <span class="number">25</span>)</span><br><span class="line"></span><br><span class="line">ind = np.arange(len(a))</span><br><span class="line">width = <span class="number">0.35</span></span><br><span class="line"></span><br><span class="line">index = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(len(d)) <span class="keyword">if</span> d[i]&lt;<span class="number">0</span>]</span><br><span class="line">bottom = np.array(c)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> index:</span><br><span class="line">    bottom[i] = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">p1 = plt.bar(ind, c, width)</span><br><span class="line">p2 = plt.bar(ind, d, width, bottom=bottom)</span><br><span class="line"></span><br><span class="line">plt.legend((p1[<span class="number">0</span>], p2[<span class="number">0</span>]), (<span class="string">'c'</span>,<span class="string">'d'</span>))</span><br><span class="line">plt.title(<span class="string">'Type 3'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<p><img src="https://raw.githubusercontent.com/zhf026/zhf026.github.io/master/file_images/Matplotlib/bar/output_6_0.png" alt="png"></p>
-<h1 id="Type-4"><a href="#Type-4" class="headerlink" title="Type 4"></a>Type 4</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">y1 = (<span class="number">20</span>, <span class="number">30</span>, <span class="number">30</span>, <span class="number">35</span>, <span class="number">27</span>)</span><br><span class="line">y2 = (<span class="number">25</span>, <span class="number">40</span>, <span class="number">34</span>, <span class="number">20</span>, <span class="number">25</span>)</span><br><span class="line">y3 = [<span class="number">-40</span>, <span class="number">25</span>, <span class="number">-35</span>, <span class="number">40</span>, <span class="number">-30</span>]</span><br><span class="line"></span><br><span class="line">ind = np.arange(len(y1))</span><br><span class="line">width = <span class="number">0.35</span></span><br><span class="line"></span><br><span class="line">index = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(len(y3)) <span class="keyword">if</span> y3[i]&lt;<span class="number">0</span>]</span><br><span class="line">temp_y1_y2 = [y1[i]+y2[i] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(y1))]</span><br><span class="line">bottom = np.array(temp_y1_y2)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> index:</span><br><span class="line">    bottom[i] = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">p1 = plt.bar(ind, y1, width)</span><br><span class="line">p2 = plt.bar(ind, y2, width, bottom=y1)</span><br><span class="line">p3 = plt.bar(ind, y3, width, bottom=bottom)</span><br><span class="line"></span><br><span class="line">plt.legend((p1[<span class="number">0</span>],p2[<span class="number">0</span>],p3[<span class="number">0</span>]),(<span class="string">'y1'</span>,<span class="string">'y2'</span>,<span class="string">'y3'</span>))</span><br><span class="line">plt.title(<span class="string">'Type 4'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<p><img src="https://raw.githubusercontent.com/zhf026/zhf026.github.io/master/file_images/Matplotlib/bar/output_8_0.png" alt="png"></p>
+        <p>&emsp;&emsp; 讲解如何在Python中安装opencv库（Windows环境）</p>
+<a id="more"></a>
+<p>&emsp;&emsp; 之前在使用opencv库（版本号4.0.0）时，发现有些模块或函数不能成功调用，比如<code>drawKeypoints</code>这个函数。经过一系列的Google和Baidu之后，成功地解决了问题。<br>&emsp;&emsp; opencv库有两种，一种是<code>opencv-python</code>，另一种是<code>opencv-contrib-python</code>。前者是基础库，后者则是在前者基础上加了一些contrib module（视觉处理一般用这个）。<br>&emsp;&emsp; 在这里，我们使用版本号为3.4.2.16的opencv库。</p>
+<h1 id="1-卸载（如果之前没安装过，请忽略）"><a href="#1-卸载（如果之前没安装过，请忽略）" class="headerlink" title="1. 卸载（如果之前没安装过，请忽略）"></a>1. 卸载（如果之前没安装过，请忽略）</h1><p><code>pip uninstall opencv-python</code>或<code>pip uninstall opencv-contrib-python</code></p>
+<h1 id="2-安装"><a href="#2-安装" class="headerlink" title="2. 安装"></a>2. 安装</h1><p><code>pip install opencv-python==3.4.2.16</code>或<code>pip install opencv-contrib-python==3.4.2.16</code><br>&emsp;&emsp; 一个快速安装库的方案：先下载好<code>.whl</code>文件，在cmd里输入<code>pip isntall</code>，再将下好的文件(.whl)拖入cmd窗口即可。</p>
+<h1 id="3-opencv-contrib-python-下载"><a href="#3-opencv-contrib-python-下载" class="headerlink" title="3. opencv-contrib-python 下载"></a>3. opencv-contrib-python 下载</h1><p>&emsp;&emsp; <a href="https://pan.baidu.com/s/1Or9j7jxPFv8iG0K7if9eyA" target="_blank" rel="noopener">opencv 3.4.2.16 百度网盘下载</a><br>&emsp;&emsp; 提取码：d6ik </p>
 
       
     </div>
@@ -466,6 +488,12 @@
     
     
     
+
+    
+      <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center;">
+  <img id="wechat_subscriber_qcode" src="/" alt="有何不可 wechat" style="width: 200px; max-width: 100%;">
+  <div>Subscribe to my blog by scanning my wechat account~</div>
+</div>
 
     
 
@@ -509,14 +537,34 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Python/" rel="tag"># Python</a>
+            <a href="/tags/python/" rel="tag"># python</a>
           
-            <a href="/tags/Matplotlib-bar/" rel="tag"># Matplotlib-bar</a>
+            <a href="/tags/opencv/" rel="tag"># opencv</a>
           
         </div>
       
 
       
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div class="social_share">
+            
+            
+              <div id="needsharebutton-postbottom">
+                <span class="btn">
+                  <i class="fa fa-share-alt" aria-hidden="true"></i>
+                </span>
+              </div>
+            
+          </div>
+        
+        </div>
       
       
 
@@ -524,8 +572,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/04/06/Gurobi/Gurobi-QP/" rel="next" title="Quadratic Program (QP)">
-                <i class="fa fa-chevron-left"></i> Quadratic Program (QP)
+              <a href="/2019/03/07/IA/PSO/" rel="next" title="粒子群算法">
+                <i class="fa fa-chevron-left"></i> 粒子群算法
               </a>
             
           </div>
@@ -533,6 +581,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/12/IES/CHP/" rel="prev" title="Combined heating and power(CHP)">
+                Combined heating and power(CHP) <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -603,7 +655,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -683,7 +735,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">16</span>
+                      
+                    
+                    <span class="site-state-item-count">17</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -711,7 +765,7 @@
                   
                     
                   
-                  <a href="mailto:zhf026@gmail.com" title="E-Mail &rarr; mailto:zhf026@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i></a>
+                  <a href="mailto:zhf026@outlook.com" title="E-Mail &rarr; mailto:zhf026@outlook.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i></a>
                 </span>
               
                 <span class="links-of-author-item">
@@ -750,7 +804,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Type-1"><span class="nav-number">1.</span> <span class="nav-text">Type 1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Type-2"><span class="nav-number">2.</span> <span class="nav-text">Type 2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Type-3"><span class="nav-number">3.</span> <span class="nav-text">Type 3</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Type-4"><span class="nav-number">4.</span> <span class="nav-text">Type 4</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-卸载（如果之前没安装过，请忽略）"><span class="nav-number">1.</span> <span class="nav-text">1. 卸载（如果之前没安装过，请忽略）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-安装"><span class="nav-number">2.</span> <span class="nav-text">2. 安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-opencv-contrib-python-下载"><span class="nav-number">3.</span> <span class="nav-text">3. opencv-contrib-python 下载</span></a></li></ol></div>
             
 
           </div>
@@ -811,6 +865,12 @@
     
 
     
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
 
     
 
@@ -848,6 +908,8 @@
 
 
 
+  
+
 
 
   
@@ -858,6 +920,9 @@
 
   
   <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/reading_progress/reading_progress.js"></script>
 
 
   
@@ -922,6 +987,38 @@
   
 
   
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+  <script>
+    
+      pbOptions = {};
+      
+        pbOptions.iconStyle = "box";
+      
+        pbOptions.boxForm = "horizontal";
+      
+        pbOptions.position = "bottomCenter";
+      
+        pbOptions.networks = "Wechat,QQZone";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+        flOptions.iconStyle = "box";
+      
+        flOptions.boxForm = "horizontal";
+      
+        flOptions.position = "middleRight";
+      
+        flOptions.networks = "Wechat,QQZone";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
 
   
 
