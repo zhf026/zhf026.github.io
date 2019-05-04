@@ -106,18 +106,18 @@
 
 
 
-  <meta name="description" content="一个记录学习的博客~ ^.^">
-<meta name="keywords" content="ZHF">
+  <meta name="description" content="&amp;emsp;&amp;emsp; 遗传算法…">
+<meta name="keywords" content="Python,Algorithm,GA">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GA">
+<meta property="og:title" content="遗传算法">
 <meta property="og:url" content="http://yoursite.com/2019/05/03/IA/GA/index.html">
 <meta property="og:site_name" content="有何不可">
-<meta property="og:description" content="一个记录学习的博客~ ^.^">
+<meta property="og:description" content="&amp;emsp;&amp;emsp; 遗传算法…">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-05-03T11:55:28.065Z">
+<meta property="og:updated_time" content="2019-05-04T06:40:49.542Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="GA">
-<meta name="twitter:description" content="一个记录学习的博客~ ^.^">
+<meta name="twitter:title" content="遗传算法">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp; 遗传算法…">
 
 
 
@@ -134,7 +134,7 @@
   };
 </script>
 
-  <title>GA | 有何不可</title>
+  <title>遗传算法 | 有何不可</title>
   
 
 
@@ -378,7 +378,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">GA
+          <h1 class="post-title" itemprop="name headline">遗传算法
 
               
             
@@ -408,8 +408,42 @@
             
 
             
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-05-04 14:40:49" itemprop="dateModified" datetime="2019-05-04T14:40:49+08:00">2019-05-04</time>
+              
+            
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Intelligent-algorithm/" itemprop="url" rel="index"><span itemprop="name">Intelligent algorithm</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -439,7 +473,45 @@
       
 
       
-        
+        <p>&emsp;&emsp; 遗传算法…<br><a id="more"></a></p>
+<h1 id="1-基本思想"><a href="#1-基本思想" class="headerlink" title="1. 基本思想"></a>1. 基本思想</h1><p>&emsp;&emsp; 遗传算法（Genetic Algorithm, GA）是模拟生物在自然环境中的遗传和进化的过程而形成的自适应全局优化搜索算法。它借用达尔文的进化论和孟德尔与摩根的遗传学学说，通过自然选择，遗传和变异等机制，实现算法的求解。</p>
+<h1 id="2-遗传算法理论"><a href="#2-遗传算法理论" class="headerlink" title="2. 遗传算法理论"></a>2. 遗传算法理论</h1><h2 id="2-1-生物学基础"><a href="#2-1-生物学基础" class="headerlink" title="2.1 生物学基础"></a>2.1 生物学基础</h2><ul>
+<li><strong>自然选择</strong>： 生存斗争包括种内斗争、种间斗争以及与环境之间的斗争。在生存斗争中，具有有利变异的个体容易存活下来，并且有更多机会将有利变异遗传给货代；而具有不利变异的个体则容易被淘汰。</li>
+<li><strong>遗传</strong>：指父代与子代之间，在性状上存在相似的现象。通过<strong>基因复制</strong>和<strong>基因交叉</strong>，使得性状的遗传得到选择和控制，使得有利的性状遗传给后代。生物的遗传特性，使生物界的物种能够保持相对的稳定。</li>
+<li><strong>变异</strong>: 指父代与子代之间，以及子代与子代之间，在性状上存在差异的现象。通过<strong>基因重组</strong>、<strong>基因变异</strong>和<strong>染色体结构和数目上的变化</strong>，可以发生变异，使得生物的性状发生改变，从而适应新的环境而不断地向前发展。生物的变异特性，使生物个体产生新的性状，以至于成为新的物种，推动了生物的进化和发展。</li>
+<li>基因：具有遗传效应的DNA片段，存储着遗传信息。</li>
+<li>染色体：遗传物质的主要载体。</li>
+</ul>
+<h2 id="2-2-理论基础"><a href="#2-2-理论基础" class="headerlink" title="2.2 理论基础"></a>2.2 理论基础</h2><h3 id="2-2-1-模式定理"><a href="#2-2-1-模式定理" class="headerlink" title="2.2.1 模式定理"></a>2.2.1 模式定理</h3><p>&emsp;&emsp; <strong>模式定理</strong>：在遗传算法选择、交叉和变异算子的作用下，具有低阶、短定义距，并且其平均适应度高于群体平均适应度的模式在子代中将呈现指数级增长。<br>&emsp;&emsp; 模式： 描述种群中在位串（染色体）的某些确定位置上具有相似性的位串子集的相似性模板。长度为L的位串，其具有的模式数为：$$ 2^L $$<br>&emsp;&emsp; 模式阶：模式H中，确定位置的个数。如模式<code>011*1</code>的阶为4，而<code>0*****</code>的阶为1。一个模式的阶越高，其样本数就越少，确定性就越高。<br>&emsp;&emsp; 定义距：在模式H中，第一个确定位置和最后一个确定位置之间的距离。</p>
+<p>&emsp;&emsp; 引入模式后，遗传算法的本质是对模式所进行的一系列运算。即通过<strong>选择操作</strong>将当前群体中的优良模式遗传到下一代群体中；通过<strong>交叉操作</strong>进行模式的重组；通过<strong>变异操作</strong>进行模式的突变。通过这些操作，较差的模式被淘汰，而一些较好的模式逐步被遗传和进化，最终就可以得到问题的最优解。<br>&emsp;&emsp; 模式定理说明：在遗传进化过程中，具有某种结构特征（高适应度、低阶和短定义距）的模式的样本数目将呈指数级增长。</p>
+<h3 id="2-2-2-积木块假设"><a href="#2-2-2-积木块假设" class="headerlink" title="2.2.2 积木块假设"></a>2.2.2 积木块假设</h3><p>&emsp;&emsp; 积木块：具有低价、短定义距以及高平均适应度的模式。<br>&emsp;&emsp; <strong>积木块假设</strong>：个体的积木块通过选择、交叉、变异等遗传算子的作用，能够相互结合在一起没形成高阶、长距、高平均适应度的个体编码串。</p>
+<h1 id="3-基本概念"><a href="#3-基本概念" class="headerlink" title="3. 基本概念"></a>3. 基本概念</h1><p>&emsp;&emsp; 遗传学与遗传算法之间的对应关系：</p>
+<blockquote>
+<p><strong>群体</strong> –&gt; 可行解集，即决策向量X组成的解空间。<br><strong>个体</strong> –&gt; 可行解，即决策向量X。<br><strong>染色体</strong> –&gt; 多个基因排列组成染色体。在遗传算法中，个体X即染色体X。<br><strong>基因</strong> –&gt; 决策向量X的分量，以不同的编码方式表现出来，常见编码方式：二进制编码，实数编码（十进制编码）等。<br><strong>个体基因型</strong> –&gt; 某种编码方式下，个体编码的排列形式。<br><strong>个体表现型</strong> –&gt; 与个体编码所对应的X值。<br><strong>个体适应度</strong> –&gt; 与个体表现型（X值）所对应的目标函数值相关联。个体X越优，适应度越大。<br><strong>选择</strong> –&gt; 选择操作<br><strong>交叉</strong> –&gt; 交叉操作<br><strong>变异</strong> –&gt; 变异操作</p>
+</blockquote>
+<blockquote>
+<p><strong>注意</strong>：遗传操作是选择操作、交叉操作和变异操作的统称。</p>
+</blockquote>
+<h1 id="4-遗传算法流程"><a href="#4-遗传算法流程" class="headerlink" title="4. 遗传算法流程"></a>4. 遗传算法流程</h1><p>&emsp;&emsp; 在遗传算法中，n维决策变量$$ X = {x_1, x_2, …, x_n} $$ 其中，X的每一个分量被看作为一个遗传基因，X就可当作是由n个遗传基因排列组成的一个染色体X。每一个分量（即遗传基因）的所有可能的取值被称为<strong>等位基因</strong>。</p>
+<blockquote>
+<p>交叉：将群体P(K)中选中的各个个体随机搭配，对每一对个体，以某一概率（交叉概率）交换它们之间的部分染色体。</p>
+</blockquote>
+<blockquote>
+<p>变异：对群体中的每个个体，以某一概率（变异概率）将一个或某一些基因座上的基因值改变为其他的等位基因值。常见的变异方式有：二进制变异、实值变异等。</p>
+</blockquote>
+<p>&emsp;&emsp; 基本流程如下：</p>
+<ol>
+<li><strong>初始化</strong>。设置最大进化代数G，随机产生初始群体。</li>
+<li><strong>个体适应度评估</strong>。</li>
+<li><strong>选择操作</strong>。根据个体的适应度，按照一定的规则或方法，从第K代群体P(K)中选择一些优良的个体传到下一代群体P(K+1)中。常见的方法有：轮盘赌。</li>
+<li><strong>交叉操作</strong>。首先，从交配池中选出要交配的一对个体；然后，根据位串长度L，对要交配的一对个体，随机选择[1,L]中的一个或多个整数M作为交叉位置；最后，根据交叉概率进行交叉操作，配对的个体在交叉位置处，相互交换各自的部分基因，从而产生一对新的个体。</li>
+<li><strong>变异操作</strong>。首先，将种群中所有个体，根据变异概率判断是否进行变异；然后，对进行变异的个体，随机选择其变异位及逆行变异。</li>
+<li><strong>终止条件判断</strong>。若满足，则结束程序；否则，跳转到2。</li>
+</ol>
+<h1 id="5-代码示例-–-Python"><a href="#5-代码示例-–-Python" class="headerlink" title="5. 代码示例 – Python"></a>5. 代码示例 – Python</h1><blockquote>
+<p>有时间再加…</p>
+</blockquote>
+
       
     </div>
 
@@ -451,7 +523,7 @@
 
     
       <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center;">
-  <img id="wechat_subscriber_qcode" src="/" alt="有何不可 wechat" style="width: 200px; max-width: 100%;">
+  <img id="wechat_subscriber_qcode" src="/images/wechat_qcode.jpg" alt="有何不可 wechat" style="width: 200px; max-width: 100%;">
   <div>Subscribe to my blog by scanning my wechat account~</div>
 </div>
 
@@ -494,6 +566,16 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          
+            <a href="/tags/GA/" rel="tag"># GA</a>
+          
+        </div>
       
 
       
@@ -576,8 +658,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -676,7 +767,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">17</span>
+                      
+                    
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -732,6 +825,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-基本思想"><span class="nav-number">1.</span> <span class="nav-text">1. 基本思想</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-遗传算法理论"><span class="nav-number">2.</span> <span class="nav-text">2. 遗传算法理论</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-生物学基础"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 生物学基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-理论基础"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 理论基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1-模式定理"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.2.1 模式定理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2-积木块假设"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2.2 积木块假设</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-基本概念"><span class="nav-number">3.</span> <span class="nav-text">3. 基本概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-遗传算法流程"><span class="nav-number">4.</span> <span class="nav-text">4. 遗传算法流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-代码示例-–-Python"><span class="nav-number">5.</span> <span class="nav-text">5. 代码示例 – Python</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
@@ -899,6 +1009,53 @@
   
   
 
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+</style>
+
+    
   
 
 
